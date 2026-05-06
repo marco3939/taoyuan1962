@@ -86,6 +86,12 @@ body::before {
   color: var(--paper); flex-shrink: 0;
 }
 .brand-medal { color: var(--gold); font-size: 22px; }
+.brand-logo {
+  width: 56px; height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.5));
+  border-radius: 3px;
+}
 .brand-cn { display: block; font-family: var(--serif-tc); font-weight: 700; font-size: 17px; letter-spacing: 2px; }
 .brand-en { display: block; font-family: var(--display); font-size: 10px; letter-spacing: 3px; opacity: .75; text-transform: uppercase; }
 
@@ -184,9 +190,16 @@ body::before {
 
 .hero-content { position: relative; z-index: 5; max-width: 900px; }
 .medal-badge {
-  width: 200px; margin: 0 auto 32px;
-  filter: drop-shadow(0 12px 36px rgba(0,0,0,.7));
+  width: clamp(280px, 36vw, 440px);
+  margin: 0 auto 32px;
+  filter: drop-shadow(0 16px 48px rgba(0,0,0,.7)) drop-shadow(0 0 32px rgba(232,164,184,.25));
   animation: medalBreath 5s ease-in-out infinite;
+}
+.medal-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
 }
 .medal-svg .petal-ring { transform-origin: 120px 160px; animation: petalRotate 22s linear infinite; }
 

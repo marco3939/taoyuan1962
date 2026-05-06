@@ -1,0 +1,14 @@
+# 不推送企劃書原檔（保留大會匿名審查保護）
+blueprint.pdf
+*.pdf
+
+# 暫存與系統檔
+.DS_Store
+Thumbs.db
+.claude/
+node_modules/
+.env
+.env.local
+*.log
+.vscode/
+.idea/
