@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>場館前後對照 — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  .compare-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  @media (max-width: 720px) { .compare-wrap { grid-template-columns: 1fr; } }
+  .compare-col { padding: 32px; min-height: 500px; }
+  .col-before { background: linear-gradient(180deg, #2a2a2a 0%, var(--night-deep) 100%); color: var(--paper-warm); }
+  .col-after { background: linear-gradient(180deg, var(--paper-warm) 0%, #f4dde2 100%); color: var(--ink); }
+  .col-tag {
+    display: inline-block;
+    font-family: var(--display);
+    font-size: 12px; letter-spacing: 4px;
+    padding: 4px 12px; margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .tag-before { background: var(--crimson); color: var(--paper); }
+  .tag-after { background: var(--military); color: var(--paper); }
+  .compare-col h3 { font-family: var(--serif-tc); font-size: 22px; letter-spacing: 4px; margin-bottom: 20px; border: none; }
+  .col-before h3 { color: var(--khaki); }
+  .compare-col ul { list-style: none; }
+  .compare-col li { padding: 8px 0 8px 28px; position: relative; font-size: 14px; line-height: 1.7; border-bottom: 1px dashed rgba(255,255,255,.15); }
+  .col-after li { border-bottom-color: rgba(58,40,23,.15); }
+  .compare-col li::before {
+    content: '✕'; position: absolute; left: 0; top: 8px;
+    font-size: 16px; color: var(--crimson);
+  }
+  .col-after li::before { content: '✓'; color: var(--military); font-weight: 700; }
+
+  /* 占比條 */
+  .layout-bars {
+    margin-top: 24px;
+    background: var(--paper);
+    padding: 20px;
+    border-left: 4px solid var(--khaki);
+  }
+  .bar-row { display: flex; align-items: center; margin: 8px 0; gap: 12px; font-size: 13px; }
+  .bar-row .name { width: 120px; font-family: var(--serif-tc); letter-spacing: 2px; }
+  .bar-track { flex: 1; height: 18px; background: var(--paper-warm); border: 1px solid var(--khaki); position: relative; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--military), var(--khaki)); position: relative; }
+  .bar-fill::after { content: attr(data-pct); position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--paper); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+  .bar-row .pct { width: 50px; text-align: right; font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter2-venue.html">場館對照</a></li>
+    <li><a href="chapter3-vr.html">VR 場景</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 2.3 · VENUE TRANSFORMATION</p>
+  <h1>閒置場館前後對照</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 議題背景 / 桃園航空城博物館改造 · P10</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="compare-wrap">
+  <div class="compare-col col-before">
+    <span class="col-tag tag-before">BEFORE · 改造前</span>
+    <h3>桃園航空城博物館閒置現況</h3>
+    <ul>
+      <li>場館部分樓層開放，展示形式以靜態展板為主</li>
+      <li>黑貓中隊展區面積有限，缺沉浸式敘事</li>
+      <li>無餐飲、文創附加價值</li>
+      <li>訪客平均停留 ≤ 45 分鐘 [L3]</li>
+      <li>國際旅客接觸度極低</li>
+      <li>缺乏 ESG / SDGs 設計</li>
+    </ul>
+    <div style="margin-top:24px;padding:16px;background:rgba(163,22,45,.15);border-left:3px solid var(--crimson);font-size:13px;">
+      <strong style="color:var(--peach-light)">痛點：</strong>展示單調 / IP 未整合 / 商業模式不健全 / 在地參與度低
+    </div>
+  </div>
+
+  <div class="compare-col col-after">
+    <span class="col-tag tag-after">AFTER · 改造後</span>
+    <h3>等待的天空文創園區</h3>
+    <ul>
+      <li>VR/AR 沉浸體驗區（占比 30%）— 6 場景</li>
+      <li>文創園區攤商街區（占比 25%）— 8 業種</li>
+      <li>主題餐飲區（占比 20%）— 5 品牌</li>
+      <li>常設展 + 特展 + 情境劇場（占比 20%）</li>
+      <li>戶外活動廣場 + 裝置藝術（占比 5%）</li>
+      <li>五感統一規範 + ESG 設計原則</li>
+    </ul>
+    <div style="margin-top:24px;padding:16px;background:rgba(74,93,58,.12);border-left:3px solid var(--military);font-size:13px;">
+      <strong>成果：</strong>平均停留 ≥ 3 hr；年訪客 ≥ 30 萬（Y1）→ 90 萬（Y5）
+    </div>
+  </div>
+</div>
+
+<h2>空間配置 · 改造後占比</h2>
+<div class="layout-bars">
+  <div class="bar-row">
+    <span class="name">VR/AR 沉浸區</span>
+    <span class="bar-track"><span class="bar-fill" style="width:30%" data-pct="30%"></span></span>
+    <span class="pct">600 ㎡</span>
+  </div>
+  <div class="bar-row">
+    <span class="name">文創攤商街</span>
+    <span class="bar-track"><span class="bar-fill" style="width:25%" data-pct="25%"></span></span>
+    <span class="pct">500 ㎡</span>
+  </div>
+  <div class="bar-row">
+    <span class="name">主題餐飲區</span>
+    <span class="bar-track"><span class="bar-fill" style="width:20%" data-pct="20%"></span></span>
+    <span class="pct">400 ㎡</span>
+  </div>
+  <div class="bar-row">
+    <span class="name">常設+特展+劇場</span>
+    <span class="bar-track"><span class="bar-fill" style="width:20%" data-pct="20%"></span></span>
+    <span class="pct">400 ㎡</span>
+  </div>
+  <div class="bar-row">
+    <span class="name">戶外廣場</span>
+    <span class="bar-track"><span class="bar-fill" style="width:5%" data-pct="5%"></span></span>
+    <span class="pct">100 ㎡</span>
+  </div>
+</div>
+
+<h2>核心問題與重要性</h2>
+<div class="callout">
+  <strong>核心問題：</strong>閒置場館 + 黑貓 IP 未活化 + 桃園文化標誌性不足。
+</div>
+<div class="callout callout-warn">
+  <strong>重要性：</strong>見證者高齡化（時間窗口 ≤ 5 年）、航空城建設窗口、文創產業政策窗口三者交集僅 <strong>2026–2028 三年</strong>，本案非「可選」而是「<strong>必須現在啟動</strong>」。
+</div>
+
+<h2>工程細部規劃</h2>
+<table class="spec-table">
+  <thead><tr><th>區域</th><th>占比</th><th>面積</th><th>工程要點</th></tr></thead>
+  <tbody>
+    <tr><td>VR/AR 沉浸區</td><td>30%</td><td>~600 ㎡</td><td>黑暗環境、空間音場、地板感應、無障礙進出</td></tr>
+    <tr><td>文創園區攤商街</td><td>25%</td><td>~500 ㎡</td><td>30 攤位、1960s 視覺統一、共榮分潤系統</td></tr>
+    <tr><td>主題餐飲區</td><td>20%</td><td>~400 ㎡</td><td>5 品牌獨立空間、HACCP 廚房、五感統一</td></tr>
+    <tr><td>常設+特展+劇場</td><td>20%</td><td>~400 ㎡</td><td>可變動展牆、情境劇場 50 席、AR 互動牆</td></tr>
+    <tr><td>戶外活動廣場</td><td>5%</td><td>~100 ㎡</td><td>裝置藝術、AR-04 集章站、戶外用餐區</td></tr>
+  </tbody>
+</table>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter2-yibaqing.html" class="btn btn-primary">◂ 一把青文化座標</a>
+  <a href="chapter3-vr.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">VR 6 場景 ▸</a>
+</div>
+
+</main>
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P10 / 25 · 2.3 閒置場館前後對照</small>
+  </div>
+</footer>
+</div>
+<script src="../js/main.js"></script>
+</body>
+</html>

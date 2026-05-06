@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 對話 RAG — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  /* AI 模組 */
+  .ai-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .ai-mod {
+    background: var(--paper-warm);
+    padding: 24px;
+    border-left: 4px solid var(--khaki);
+  }
+  .ai-mod-id { font-family: var(--display); font-size: 22px; color: var(--khaki-deep); font-weight: 800; letter-spacing: 4px; }
+  .ai-mod h4 { font-family: var(--serif-tc); font-size: 17px; letter-spacing: 3px; margin: 6px 0 10px; }
+  .ai-mod p { font-size: 13px; line-height: 1.7; }
+
+  /* Chat Demo */
+  .chat-demo {
+    background: var(--night);
+    color: var(--paper);
+    padding: 32px;
+    margin: 48px 0;
+    border: 1px solid var(--khaki);
+    position: relative;
+  }
+  .chat-demo h3 { color: var(--khaki); border: none; }
+  .chat-window {
+    background: var(--night-deep);
+    border: 1px solid rgba(201,169,97,.3);
+    height: 480px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .chat-header {
+    background: var(--military-deep);
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--khaki);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .chat-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--khaki);
+    color: var(--night);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-weight: 800; font-size: 18px;
+    border: 2px solid var(--paper);
+  }
+  .chat-name { font-family: var(--serif-tc); font-size: 16px; letter-spacing: 3px; }
+  .chat-name small { display: block; font-family: var(--mono); font-size: 11px; opacity: .7; letter-spacing: 1px; }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto;
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+    font-size: 14px;
+  }
+  .msg {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    line-height: 1.6;
+    animation: fadeUp .4s ease both;
+  }
+  .msg.user {
+    background: var(--peach-deep);
+    color: var(--paper);
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  .msg.ai {
+    background: rgba(244,235,208,.08);
+    border: 1px solid rgba(201,169,97,.3);
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+  .msg.ai .source {
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px dashed rgba(201,169,97,.3);
+    font-family: var(--mono); font-size: 11px;
+    color: var(--khaki); letter-spacing: 1px;
+  }
+  .msg.ai .warn {
+    margin-top: 6px;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--peach-light); opacity: .8; letter-spacing: 1px;
+  }
+
+  .chat-input {
+    border-top: 1px solid rgba(201,169,97,.3);
+    padding: 14px;
+    display: flex; gap: 8px;
+    background: rgba(0,0,0,.3);
+  }
+  .chat-input input {
+    flex: 1; padding: 12px 16px;
+    background: var(--night);
+    border: 1px solid rgba(201,169,97,.3);
+    color: var(--paper); font-size: 14px;
+    font-family: var(--sans-tc);
+    outline: none;
+  }
+  .chat-input input:focus { border-color: var(--khaki); }
+  .chat-send {
+    padding: 12px 22px;
+    background: var(--khaki); color: var(--night);
+    border: none; font-family: var(--serif-tc);
+    letter-spacing: 3px; font-weight: 700;
+  }
+
+  .chat-suggestions {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin: 12px 0 0;
+  }
+  .chat-sug-btn {
+    background: rgba(201,169,97,.1);
+    border: 1px solid rgba(201,169,97,.3);
+    color: var(--khaki);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: var(--sans-tc);
+    cursor: pointer; transition: background .2s;
+  }
+  .chat-sug-btn:hover { background: rgba(201,169,97,.25); }
+
+  .typing-indicator {
+    display: inline-flex; gap: 4px;
+    padding: 14px 16px;
+  }
+  .typing-indicator span {
+    width: 8px; height: 8px;
+    background: var(--khaki);
+    border-radius: 50%;
+    animation: typingDot 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: .15s; }
+  .typing-indicator span:nth-child(3) { animation-delay: .3s; }
+  @keyframes typingDot {
+    0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* 倫理面板 */
+  .ethics-panel {
+    background: linear-gradient(135deg, rgba(163,22,45,.08), rgba(244,235,208,.4));
+    border: 1px solid var(--crimson);
+    padding: 24px;
+    margin: 32px 0;
+  }
+  .ethics-panel h3 { color: var(--crimson); border: none; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter3-vr.html">VR 場景</a></li>
+    <li><a href="chapter3-ar.html">AR 點位</a></li>
+    <li><a href="chapter3-ai.html">AI 對話</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 3.4 · AI INTERACTION · RAG</p>
+  <h1>AI 互動模組</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 四維融合 / RAG + 倫理揭露 · P14</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="callout">
+  <strong>AI 採 RAG 錨定真實 corpus：</strong>已解密文件 + 見證者授權口述史（≥ 30 hr）+《一把青》原著（已授權）。建議自建 RAG + 開源模型，避免送第三方 API。介面標註「AI 生成內容，僅供參考」並提供原始史料連結。
+</div>
+
+<h2>AI 四種應用</h2>
+<div class="ai-modules">
+  <div class="ai-mod">
+    <div class="ai-mod-id">AI-A</div>
+    <h4>個人化導覽</h4>
+    <p><strong>技術：</strong>推薦演算法 + LLM<br/><strong>場景：</strong>行前 Chatbot、動態動線、即時多語（中英日韓）</p>
+  </div>
+  <div class="ai-mod">
+    <div class="ai-mod-id">AI-B</div>
+    <h4>對話式角色（RAG）</h4>
+    <p><strong>技術：</strong>RAG + 開源 LLM<br/><strong>場景：</strong>虛擬黑貓老兵、虛擬眷屬、史學顧問互動</p>
+  </div>
+  <div class="ai-mod">
+    <div class="ai-mod-id">AI-C</div>
+    <h4>情緒適應</h4>
+    <p><strong>技術：</strong>情緒辨識（可選）<br/><strong>場景：</strong>VR 沉浸強度動態調整、無障礙降階</p>
+  </div>
+  <div class="ai-mod">
+    <div class="ai-mod-id">AI-D</div>
+    <h4>出館回顧</h4>
+    <p><strong>技術：</strong>生成式摘要<br/><strong>場景：</strong>體驗摘要、社群短影音生成、回訪推薦</p>
+  </div>
+</div>
+
+<div class="chat-demo">
+  <h3>★ AI-B 即時體驗 · 虛擬黑貓老兵「李上校」</h3>
+  <p style="opacity:.85;font-size:13px;letter-spacing:1px;">與虛擬黑貓老兵（虛構稱謂）對話 · 每段 AI 回覆附「原始史料連結」與「來源錨定編號」</p>
+
+  <div class="chat-window">
+    <div class="chat-header">
+      <div class="chat-avatar">★</div>
+      <div class="chat-name">李上校 <small>RAG · Corpus #017 / 30+ hr 口述史錨定</small></div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg ai">
+        我是李上校（虛構稱謂），1962 年加入第 35 中隊，駐紮桃園基地。你想問我什麼？
+        <div class="source">▸ 來源：見證者口述史 corpus 綜合 · RAG 錨定</div>
+        <div class="warn">⚠ AI 生成內容，僅供參考</div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input id="chatInput" type="text" placeholder="輸入你的問題..." onkeypress="if(event.key==='Enter') sendChat()" />
+      <button class="chat-send" onclick="sendChat()">發送</button>
+    </div>
+  </div>
+
+  <div class="chat-suggestions">
+    <button class="chat-sug-btn" onclick="askSug('你怕嗎？')">你怕嗎？</button>
+    <button class="chat-sug-btn" onclick="askSug('U-2 飛多高？')">U-2 飛多高？</button>
+    <button class="chat-sug-btn" onclick="askSug('黑貓中隊何時成軍？')">黑貓中隊何時成軍？</button>
+    <button class="chat-sug-btn" onclick="askSug('CIA 有參與嗎？')">CIA 有參與嗎？</button>
+    <button class="chat-sug-btn" onclick="askSug('解散原因是什麼？')">解散原因？</button>
+    <button class="chat-sug-btn" onclick="askSug('家人會擔心嗎？')">家人會擔心嗎？</button>
+    <button class="chat-sug-btn" onclick="askSug('擊落幾架？')">擊落幾架？</button>
+  </div>
+</div>
+
+<div class="ethics-panel">
+  <h3>★ AI 倫理揭露 · 強制邊界</h3>
+  <table class="spec-table">
+    <tr><th>項目</th><th>做法</th></tr>
+    <tr><td>模型選用</td><td>建議自建 RAG + 開源模型（口述史敏感，避免送第三方 API）[L3]</td></tr>
+    <tr><td>Corpus</td><td>已解密文件 + 見證者授權口述史（≥30 hr）+《一把青》原著（已授權）</td></tr>
+    <tr><td>個資</td><td>對話保留期限明示、刪除機制、不蒐集敏感類別</td></tr>
+    <tr><td>幻覺緩解</td><td>RAG 錨定 + 史學顧問人工審核 + 使用者回報 + 介面警示「AI 生成，僅供參考」</td></tr>
+    <tr><td>透明度</td><td>每段 AI 回覆附「原始史料連結」與「來源錨定編號」</td></tr>
+    <tr><td><strong style="color:var(--crimson)">禁止項</strong></td><td><strong>禁止 AI 自由生成歷史人物對話（必須 RAG）、禁止生成擊落數字等敏感數據</strong></td></tr>
+  </table>
+</div>
+
+<h2>RAG 互動範例 · 透明來源錨定</h2>
+<div style="background:var(--paper-warm);padding:24px;border-left:4px solid var(--khaki);font-family:var(--mono);font-size:13px;line-height:1.9;">
+  <div><strong style="color:var(--peach-deep)">使用者：</strong>「你怕嗎？」</div>
+  <div style="margin-top:12px;"><strong style="color:var(--military-deep)">AI 回覆（基於 corpus）：</strong></div>
+  <div style="font-family:var(--serif-tc);font-size:16px;letter-spacing:2px;color:var(--ink);margin:8px 0 12px 16px;border-left:3px solid var(--khaki);padding-left:12px;">
+    「飛 7 萬呎以上，座艙壓力比月球表面還低。你問我怕？<strong>恐懼變成程序。</strong>」
+  </div>
+  <div style="opacity:.7;"><strong>來源錨定：</strong>見證者口述史 #017，1965 任務後採訪片段 [L1]</div>
+  <div style="opacity:.7;"><strong>警示標籤：</strong>AI 生成內容，僅供參考。原始錄音 [連結]</div>
+</div>
+
+<h2>AI 應用流程</h2>
+<table class="spec-table">
+  <thead><tr><th>階段</th><th>AI 模組</th><th>場景</th></tr></thead>
+  <tbody>
+    <tr><td>行前</td><td>AI-A</td><td>個人化推薦、票務客服、行前知識</td></tr>
+    <tr><td>入館</td><td>AI-A + 動線推薦</td><td>動線推薦、深度敘事、情緒適應（AI-C）</td></tr>
+    <tr><td>VR 沉浸中</td><td>AI-B（RAG）</td><td>虛擬黑貓老兵、虛擬眷屬對話</td></tr>
+    <tr><td>用餐 / 購物</td><td>AI 推薦</td><td>攤商推薦、餐飲時代故事推送</td></tr>
+    <tr><td>戶外擴散</td><td>AI + AR</td><td>城市點位探索、集章兌獎</td></tr>
+    <tr><td>出館</td><td>AI-D</td><td>體驗摘要、社群短影音生成、回訪推薦</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>AI 模型與 RAG 系統預算：880 萬元（總預算 11%）</strong> · 自建/開源、corpus 標註 30hr+、幻覺率 &lt;0.5%
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter3-ar.html" class="btn btn-primary">◂ AR 點位</a>
+  <a href="chapter3-cultural.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">文創 8 業種 ▸</a>
+</div>
+
+</main>
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P14 / 25 · 3.4 AI 互動模組（RAG + 倫理揭露）</small>
+  </div>
+</footer>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+// === RAG 模擬 corpus ===
+const corpus = [
+  {
+    keys: ['怕', '害怕', '恐懼', '危險'],
+    answer: '飛 7 萬呎以上，座艙壓力比月球表面還低。你問我怕？恐懼變成程序。',
+    source: '見證者口述史 #017，1965 任務後採訪片段 [L1]'
+  },
+  {
+    keys: ['多高', '高度', '7萬', '7 萬', 'U-2'],
+    answer: 'U-2 高空偵察機作戰高度 70,000 呎以上，約 21,300 公尺。當時的米格機追不上，但雷達可以鎖定。',
+    source: 'CIA 解密文件公開 U-2 對華偵察任務規格 [L1]'
+  },
+  {
+    keys: ['成軍', '成立', '何時', '時候', '哪一年'],
+    answer: '中華民國空軍第 35 中隊於 1961 年成軍，駐紮桃園空軍基地。我是 1962 年加入的。',
+    source: '國家檔案管理局 1961–1974 空軍黑貓中隊公開檔案 [L1]'
+  },
+  {
+    keys: ['CIA', '美國', '中央情報', '合作'],
+    answer: '是的，我們與美國中央情報局（CIA）合作組訓。U-2 飛機由美方提供，飛行員由我方派出。是當時冷戰格局下的特殊合作。',
+    source: 'CIA 解密文件中 U-2 對華偵察任務公開部分 [L1]'
+  },
+  {
+    keys: ['解散', '結束', '1974', '為什麼結束'],
+    answer: '1974 年中隊解散。原因有二：一是中美關係正常化進程啟動，二是衛星偵察技術成熟，U-2 高空偵察的戰略價值轉移。',
+    source: '國防部公開出版品中關於空軍第 35 中隊之記載 [L1]'
+  },
+  {
+    keys: ['家人', '太太', '妻子', '家屬', '妻女', '擔心'],
+    answer: '太太從不問我去哪。她只在我每次起飛的早晨，把咖啡放在桌上，看我穿好飛行衣。等我回來，她就站在圍牆外。等待，是她的工作；飛，是我的。',
+    source: '見證者口述史 #042，遺孀採訪 2018 [L1] · 與《一把青》「等待」精神共振 [L2]',
+    warn: '⚠ 邊界：本案僅以《一把青》為「同時代精神參照」，不將虛構角色與真實隊員對應'
+  },
+  {
+    keys: ['擊落', '殉職', '幾架', '死亡', '人數', '名單'],
+    answer: '⚠ 抱歉，依本案 AI 倫理協定，我無法回答擊落數字、殉職人數等敏感數據的具體數值。具體名單依國防部公開資料為準。請至國家檔案管理局公開檔案查詢。',
+    source: '本案 AI 倫理協定 · 禁止生成敏感數據 [G 治理]',
+    warn: '⚠ AI 倫理：禁止項已觸發，已導向公開檔案'
+  },
+  {
+    keys: ['桃園', '基地', '哪裡', '駐紮'],
+    answer: '我們駐紮桃園空軍基地，就是現在桃園機場周邊。地理唯一性是黑貓中隊的特色 — 不能被複製的城市資產。',
+    source: '國防部公開出版品 [L1]'
+  },
+  {
+    keys: ['一把青', '朱青', '小說', '電視劇'],
+    answer: '《一把青》是白先勇先生 1971 年的小說，2015 年由公視改編電視劇。劇情寫的是空軍眷屬，與我們黑貓中隊不是同單位，但時代精神是相通的 — 都是「等待」這件事。',
+    source: '白先勇〈一把青〉，《台北人》，爾雅出版社 1971 [L2]'
+  },
+  {
+    keys: ['任務', '工作', '飛行', '做什麼'],
+    answer: '我們執行對中國大陸戰略偵察任務。具體細節以已解密資料為準。每次任務 7+ 小時，單獨在 7 萬呎高空。地球的弧度看得見，但下面的人看不見你。',
+    source: '已解密文件 [L1]'
+  }
+];
+
+function ragRetrieve(q) {
+  const Q = q.toLowerCase();
+  for (const item of corpus) {
+    if (item.keys.some(k => Q.includes(k.toLowerCase()))) return item;
+  }
+  return {
+    answer: '這個問題在我的 corpus 裡沒有直接對應的記憶片段。建議你查閱：(1) 國家檔案管理局 1961–1974 空軍黑貓中隊公開檔案；(2) 國防部公開出版品；(3) CIA 解密文件公開部分。',
+    source: '本案 RAG corpus 範圍外 [L4 待補]',
+    warn: '⚠ AI 透明度：corpus 無對應，已導向公開檔案'
+  };
+}
+
+const messagesEl = document.getElementById('chatMessages');
+const inputEl = document.getElementById('chatInput');
+
+function appendMsg(role, text, source, warn) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  let html = text.replace(/\n/g, '<br/>');
+  if (source) html += `<div class="source">▸ 來源：${source}</div>`;
+  if (warn) html += `<div class="warn">${warn}</div>`;
+  else if (role === 'ai') html += `<div class="warn">⚠ AI 生成內容，僅供參考</div>`;
+  div.innerHTML = html;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function appendTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typing';
+  div.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function sendChat() {
+  const v = inputEl.value.trim();
+  if (!v) return;
+  appendMsg('user', v);
+  inputEl.value = '';
+  appendTyping();
+  setTimeout(() => {
+    removeTyping();
+    const r = ragRetrieve(v);
+    appendMsg('ai', r.answer, r.source, r.warn);
+  }, 900 + Math.random() * 600);
+}
+
+function askSug(q) {
+  inputEl.value = q;
+  sendChat();
+}
+</script>
+</body>
+</html>

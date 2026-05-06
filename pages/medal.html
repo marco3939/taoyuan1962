@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>桃花飛機勳章 LOGO — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  body { background: linear-gradient(180deg, #1a2538 0%, var(--night) 100%); color: var(--paper); }
+  body::before { display: none; }
+
+  .medal-stage {
+    min-height: 80vh;
+    padding: 80px var(--gutter) 60px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .medal-stage::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(201,169,97,.15) 0%, transparent 50%),
+      radial-gradient(1px 1px at 20% 30%, rgba(244,235,208,.5), transparent),
+      radial-gradient(1px 1px at 80% 70%, rgba(244,235,208,.5), transparent),
+      radial-gradient(2px 2px at 50% 20%, rgba(244,235,208,.7), transparent);
+    background-size: auto, 300px 300px, 300px 300px, 300px 300px;
+  }
+  .medal-3d {
+    width: clamp(280px, 50vw, 460px);
+    aspect-ratio: 6/7;
+    cursor: grab;
+    perspective: 1200px;
+    margin: 0 auto;
+  }
+  .medal-3d-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .15s ease-out;
+  }
+  .medal-stage:hover .medal-3d-inner { animation-play-state: paused; }
+  .medal-svg-big { width: 100%; height: 100%; filter: drop-shadow(0 20px 80px rgba(232,164,184,.4)); }
+
+  .stage-info { text-align: center; position: relative; z-index: 5; }
+  .stage-info h1 {
+    font-family: var(--serif-tc);
+    font-size: clamp(36px, 6vw, 64px);
+    letter-spacing: 12px;
+    margin: 32px 0 12px;
+    color: var(--paper);
+  }
+  .stage-info .en {
+    font-family: var(--display);
+    font-size: 14px; letter-spacing: 6px;
+    color: var(--khaki); margin-bottom: 24px;
+  }
+  .ribbon-text {
+    font-family: var(--serif-tc);
+    font-size: 22px; letter-spacing: 8px;
+    color: var(--peach-light);
+    margin-bottom: 16px;
+  }
+  .stage-hint {
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: 2px; opacity: .55;
+    margin-top: 24px;
+  }
+
+  /* 元素解析 */
+  .element-section {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 96px var(--gutter);
+  }
+  .element-section .section-head h2 { color: var(--ink); }
+  .element-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: var(--container);
+    margin: 32px auto;
+  }
+  .el-card {
+    background: var(--paper-warm);
+    padding: 24px;
+    border-left: 4px solid var(--khaki);
+    transition: transform .25s, box-shadow .25s;
+    cursor: pointer;
+  }
+  .el-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-deep); }
+  .el-card .el-icon { font-size: 32px; color: var(--khaki-deep); margin-bottom: 12px; }
+  .el-card h4 { font-family: var(--serif-tc); font-size: 17px; letter-spacing: 3px; margin-bottom: 8px; }
+  .el-card p { font-size: 13px; line-height: 1.7; }
+
+  /* 配色方案 */
+  .palette-section { background: var(--night-deep); padding: 96px var(--gutter); color: var(--paper); }
+  .palette-section .section-head h2 { color: var(--paper); }
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    max-width: var(--container);
+    margin: 32px auto;
+  }
+  .palette {
+    padding: 32px 20px;
+    text-align: center;
+    border: 1px solid rgba(244,235,208,.15);
+  }
+  .palette .swatch {
+    width: 80px; height: 80px;
+    margin: 0 auto 16px;
+    border: 2px solid var(--paper);
+    box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  }
+  .palette .name { font-family: var(--serif-tc); font-size: 16px; letter-spacing: 3px; margin-bottom: 6px; }
+  .palette .hex { font-family: var(--mono); font-size: 12px; opacity: .7; letter-spacing: 1px; }
+  .palette .role { font-family: var(--mono); font-size: 11px; color: var(--khaki); margin-top: 8px; letter-spacing: 1px; }
+
+  /* 變體 */
+  .variants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: var(--container);
+    margin: 32px auto;
+  }
+  .variant {
+    background: var(--paper);
+    padding: 24px;
+    text-align: center;
+    border: 1px solid var(--khaki);
+  }
+  .variant svg { width: 80%; margin: 0 auto 12px; display: block; }
+  .variant h5 { font-family: var(--serif-tc); font-size: 15px; letter-spacing: 3px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter3-vr.html">VR</a></li>
+    <li><a href="chapter3-ai.html">AI</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="medal-stage" id="stage">
+  <div style="text-align:center;width:100%;">
+    <div class="medal-3d" id="medal3d">
+      <div class="medal-3d-inner" id="medalInner">
+        <svg viewBox="0 0 240 280" class="medal-svg-big" aria-label="桃花飛機勳章">
+          <defs>
+            <linearGradient id="goldgrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#e8c97a"/>
+              <stop offset="1" stop-color="#a8893f"/>
+            </linearGradient>
+            <radialGradient id="petalgrad">
+              <stop offset="0" stop-color="#f4c7c3"/>
+              <stop offset="1" stop-color="#c97a8e"/>
+            </radialGradient>
+            <linearGradient id="paperbg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f4ebd0"/>
+              <stop offset="1" stop-color="#e8dcb5"/>
+            </linearGradient>
+          </defs>
+          <!-- 紙感紋理底 -->
+          <path d="M120,55 L210,90 L210,180 Q210,230 120,270 Q30,230 30,180 L30,90 Z"
+                fill="url(#paperbg)" stroke="#3a2817" stroke-width="2.5"/>
+          <!-- 內框 -->
+          <path d="M120,65 L200,95 L200,180 Q200,222 120,258 Q40,222 40,180 L40,95 Z"
+                fill="none" stroke="url(#goldgrad)" stroke-width="2"/>
+          <!-- 雙金線 -->
+          <path d="M120,72 L194,99 L194,180 Q194,218 120,252 Q46,218 46,180 L46,99 Z"
+                fill="none" stroke="#c9a961" stroke-width=".5" opacity=".6"/>
+
+          <!-- 上方軍綠勳帶 + 等你回家橫幅 -->
+          <path d="M40,0 L120,40 L200,0 L200,28 L120,72 L40,28 Z"
+                fill="#4a5d3a" stroke="url(#goldgrad)" stroke-width="2"/>
+          <path d="M44,4 L120,42 L196,4" fill="none" stroke="#c9a961" stroke-width=".8" opacity=".6"/>
+          <text x="120" y="22" text-anchor="middle" fill="#f4ebd0" font-family="Noto Serif TC" font-weight="900" font-size="14" letter-spacing="6">等你回家</text>
+          <text x="120" y="38" text-anchor="middle" fill="#c9a961" font-family="Cinzel" font-weight="700" font-size="6" letter-spacing="3">WAITING FOR HOME</text>
+
+          <!-- 桃花環繞 (8 片) -->
+          <g class="petal-ring">
+            <g transform="translate(120,160)">
+              <g transform="rotate(0)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(45)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(90)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(135)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(180)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(225)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(270)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+              <g transform="rotate(315)"><path d="M0,-78 Q-7,-65 0,-55 Q7,-65 0,-78" fill="url(#petalgrad)"/><circle cy="-65" r="3" fill="#a3162d" opacity=".5"/></g>
+            </g>
+          </g>
+
+          <!-- 戰機剪影 (F-86 / U-2 風格) -->
+          <g transform="translate(120,168)">
+            <!-- 機身 -->
+            <ellipse cx="0" cy="0" rx="6" ry="36" fill="#4a5d3a" stroke="#3a4a2a" stroke-width=".5"/>
+            <!-- 主翼 -->
+            <path d="M-58,-2 L-12,-6 L-12,4 L-58,8 Z" fill="#4a5d3a" stroke="#3a4a2a" stroke-width=".5"/>
+            <path d="M58,-2 L12,-6 L12,4 L58,8 Z" fill="#4a5d3a" stroke="#3a4a2a" stroke-width=".5"/>
+            <!-- 尾翼 -->
+            <path d="M-16,28 L-6,24 L0,28 L0,34 L-16,32 Z" fill="#3a4a2a"/>
+            <path d="M16,28 L6,24 L0,28 L0,34 L16,32 Z" fill="#3a4a2a"/>
+            <!-- 機鼻 -->
+            <ellipse cx="0" cy="-36" rx="3" ry="8" fill="#3a4a2a"/>
+            <!-- 駕駛艙 -->
+            <ellipse cx="0" cy="-12" rx="4" ry="8" fill="#a8c4d4" opacity=".7"/>
+          </g>
+
+          <!-- 黑貓貓臉 -->
+          <g transform="translate(120,148)">
+            <!-- 貓臉輪廓 -->
+            <ellipse cx="0" cy="0" rx="22" ry="20" fill="#1a1a1a"/>
+            <!-- 耳朵 -->
+            <path d="M-18,-12 L-22,-26 L-10,-16 Z" fill="#1a1a1a"/>
+            <path d="M18,-12 L22,-26 L10,-16 Z" fill="#1a1a1a"/>
+            <!-- 內耳 -->
+            <path d="M-16,-13 L-19,-22 L-12,-16 Z" fill="#a3162d" opacity=".6"/>
+            <path d="M16,-13 L19,-22 L12,-16 Z" fill="#a3162d" opacity=".6"/>
+            <!-- 眼睛 (警戒目光) -->
+            <ellipse cx="-8" cy="-2" rx="4" ry="6" fill="#c9a961"/>
+            <ellipse cx="8" cy="-2" rx="4" ry="6" fill="#c9a961"/>
+            <ellipse cx="-8" cy="-2" rx="1.5" ry="5" fill="#1a1a1a"/>
+            <ellipse cx="8" cy="-2" rx="1.5" ry="5" fill="#1a1a1a"/>
+            <!-- 鼻 -->
+            <path d="M-2,4 L0,8 L2,4 Z" fill="#e8a4b8"/>
+            <!-- 嘴 -->
+            <path d="M-4,10 Q0,12 4,10" stroke="#e8a4b8" stroke-width="1" fill="none"/>
+            <!-- 鬍鬚 -->
+            <line x1="-22" y1="2" x2="-32" y2="0" stroke="#f4ebd0" stroke-width=".5"/>
+            <line x1="-22" y1="6" x2="-32" y2="6" stroke="#f4ebd0" stroke-width=".5"/>
+            <line x1="22" y1="2" x2="32" y2="0" stroke="#f4ebd0" stroke-width=".5"/>
+            <line x1="22" y1="6" x2="32" y2="6" stroke="#f4ebd0" stroke-width=".5"/>
+          </g>
+
+          <!-- 35 番號 -->
+          <text x="120" y="200" text-anchor="middle" fill="#a3162d" font-family="Cinzel" font-weight="800" font-size="11" letter-spacing="3" opacity=".75">35TH SQUADRON</text>
+
+          <!-- TAOYUAN 1962 標牌 -->
+          <rect x="50" y="232" width="140" height="22" rx="2" fill="#3a4a2a" stroke="url(#goldgrad)" stroke-width="1.5"/>
+          <text x="120" y="248" text-anchor="middle" fill="#f4ebd0" font-family="Cinzel" font-weight="800" font-size="13" letter-spacing="4">TAOYUAN · 1962</text>
+
+          <!-- 五星 -->
+          <g fill="#c9a961" opacity=".8">
+            <path d="M62,86 L64,90 L68,90 L65,93 L66,97 L62,95 L58,97 L59,93 L56,90 L60,90 Z"/>
+            <path d="M178,86 L180,90 L184,90 L181,93 L182,97 L178,95 L174,97 L175,93 L172,90 L176,90 Z"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stage-info">
+      <p class="ribbon-text">飛過冷戰，等你回家</p>
+      <h1>桃花飛機勳章</h1>
+      <p class="en">PEACH BLOSSOM AIRCRAFT · MEDAL DESIGN</p>
+      <p class="stage-hint">▸ 移動滑鼠／拖曳檢視 ◂</p>
+    </div>
+  </div>
+</div>
+
+<section class="element-section">
+  <div class="section-head">
+    <span class="kicker">LOGO ANALYSIS</span>
+    <h2>勳章元素解析</h2>
+    <p class="lede">致敬軍方部隊徽章傳統、35 中隊軍事血統；1960s 解密文件視覺語彙</p>
+  </div>
+
+  <div class="element-grid">
+    <div class="el-card">
+      <div class="el-icon">🛡️</div>
+      <h4>盾牌勳章造型 + 復古紙感背景</h4>
+      <p>致敬軍方部隊徽章傳統、35 中隊軍事血統；1960s 解密文件視覺語彙</p>
+    </div>
+    <div class="el-card">
+      <div class="el-icon">🏠</div>
+      <h4>「等你回家」中文橫幅（頂部）</h4>
+      <p>本案核心情感主軸、SLOGAN 直接視覺化，軍綠勳帶設計</p>
+    </div>
+    <div class="el-card">
+      <div class="el-icon">🐈‍⬛</div>
+      <h4>黑貓貓臉（機身核心）</h4>
+      <p>黑貓中隊隊徽 IP 錨點；貓臉警戒目光呼應偵察任務</p>
+    </div>
+    <div class="el-card">
+      <div class="el-icon">✈️</div>
+      <h4>軍綠戰機剪影（F-86 / U-2）</h4>
+      <p>1960s 桃園基地戰機 + 桃花環繞，飛行 × 家屋雙意象</p>
+    </div>
+    <div class="el-card">
+      <div class="el-icon">🌸</div>
+      <h4>桃花環繞</h4>
+      <p>桃園市鳥／市花元素；柔化軍事剛性、體現眷村之心；八片花瓣對應方位</p>
+    </div>
+    <div class="el-card">
+      <div class="el-icon">📛</div>
+      <h4>TAOYUAN 1962 標牌（底部）</h4>
+      <p>成軍年份錨定，粗 serif 軍牌字型、深綠底白字</p>
+    </div>
+  </div>
+</section>
+
+<section class="palette-section">
+  <div class="section-head">
+    <span class="kicker">COLOR PALETTE</span>
+    <h2>主色系統</h2>
+    <p class="lede" style="color:var(--paper-warm);opacity:.85;">桃粉 = 桃花 · 軍綠 = 戰機 · 卡其 = 1960s 復古紙感</p>
+  </div>
+
+  <div class="palette-grid">
+    <div class="palette">
+      <div class="swatch" style="background:#e8a4b8"></div>
+      <div class="name">桃粉</div>
+      <div class="hex">#E8A4B8</div>
+      <div class="role">桃花 · 眷村之心</div>
+    </div>
+    <div class="palette">
+      <div class="swatch" style="background:#4a5d3a"></div>
+      <div class="name">軍綠</div>
+      <div class="hex">#4A5D3A</div>
+      <div class="role">戰機 · 冷戰之天</div>
+    </div>
+    <div class="palette">
+      <div class="swatch" style="background:#c9a961"></div>
+      <div class="name">卡其／勳章金</div>
+      <div class="hex">#C9A961</div>
+      <div class="role">1960s 復古紙感</div>
+    </div>
+    <div class="palette">
+      <div class="swatch" style="background:#3a2817"></div>
+      <div class="name">深棕</div>
+      <div class="hex">#3A2817</div>
+      <div class="role">墨水 · 文件感</div>
+    </div>
+    <div class="palette">
+      <div class="swatch" style="background:#1a1a1a"></div>
+      <div class="name">黑貓黑</div>
+      <div class="hex">#1A1A1A</div>
+      <div class="role">隊徽 IP 錨點</div>
+    </div>
+  </div>
+</section>
+
+<section class="element-section">
+  <div class="section-head">
+    <span class="kicker">VARIANTS</span>
+    <h2>勳章變體 · 4 套</h2>
+    <p class="lede">主版／簡化／黑白／戳章</p>
+  </div>
+
+  <div class="variants">
+    <div class="variant">
+      <svg viewBox="0 0 100 110">
+        <path d="M50,18 L88,38 L88,72 Q88,90 50,108 Q12,90 12,72 L12,38 Z" fill="#f4ebd0" stroke="#3a2817" stroke-width="1"/>
+        <circle cx="50" cy="55" r="14" fill="#1a1a1a"/>
+        <ellipse cx="46" cy="52" rx="2" ry="3" fill="#c9a961"/>
+        <ellipse cx="54" cy="52" rx="2" ry="3" fill="#c9a961"/>
+        <rect x="22" y="86" width="56" height="10" fill="#3a4a2a"/>
+        <text x="50" y="93" text-anchor="middle" fill="#f4ebd0" font-family="Cinzel" font-size="6" font-weight="800" letter-spacing="1">TAOYUAN 1962</text>
+        <path d="M22,2 L50,16 L78,2 L78,12 L50,28 L22,12 Z" fill="#4a5d3a"/>
+        <text x="50" y="11" text-anchor="middle" fill="#f4ebd0" font-family="Noto Serif TC" font-size="5" font-weight="700" letter-spacing="2">等你回家</text>
+      </svg>
+      <h5>主版・完整</h5>
+    </div>
+    <div class="variant">
+      <svg viewBox="0 0 100 110">
+        <circle cx="50" cy="55" r="40" fill="#f4ebd0" stroke="#c9a961" stroke-width="2"/>
+        <circle cx="50" cy="55" r="20" fill="#1a1a1a"/>
+        <ellipse cx="44" cy="52" rx="3" ry="4" fill="#c9a961"/>
+        <ellipse cx="56" cy="52" rx="3" ry="4" fill="#c9a961"/>
+        <text x="50" y="100" text-anchor="middle" fill="#3a2817" font-family="Cinzel" font-size="7" font-weight="800" letter-spacing="1">1962</text>
+      </svg>
+      <h5>簡化版</h5>
+    </div>
+    <div class="variant">
+      <svg viewBox="0 0 100 110">
+        <path d="M50,18 L88,38 L88,72 Q88,90 50,108 Q12,90 12,72 L12,38 Z" fill="#fff" stroke="#000" stroke-width="2"/>
+        <circle cx="50" cy="55" r="14" fill="#000"/>
+        <ellipse cx="46" cy="52" rx="2" ry="3" fill="#fff"/>
+        <ellipse cx="54" cy="52" rx="2" ry="3" fill="#fff"/>
+        <rect x="22" y="86" width="56" height="10" fill="#000"/>
+        <text x="50" y="93" text-anchor="middle" fill="#fff" font-family="Cinzel" font-size="6" font-weight="800" letter-spacing="1">TAOYUAN 1962</text>
+        <path d="M22,2 L50,16 L78,2 L78,12 L50,28 L22,12 Z" fill="#000"/>
+        <text x="50" y="11" text-anchor="middle" fill="#fff" font-family="Noto Serif TC" font-size="5" font-weight="700" letter-spacing="2">等你回家</text>
+      </svg>
+      <h5>黑白版</h5>
+    </div>
+    <div class="variant">
+      <svg viewBox="0 0 100 110">
+        <circle cx="50" cy="55" r="40" fill="none" stroke="#a3162d" stroke-width="3" opacity=".75"/>
+        <circle cx="50" cy="55" r="34" fill="none" stroke="#a3162d" stroke-width="1" opacity=".5"/>
+        <text x="50" y="50" text-anchor="middle" fill="#a3162d" font-family="Cinzel" font-size="9" font-weight="800" opacity=".75">DECLASSIFIED</text>
+        <text x="50" y="64" text-anchor="middle" fill="#a3162d" font-family="Courier Prime" font-size="6" opacity=".7">★ TAOYUAN ★</text>
+        <text x="50" y="76" text-anchor="middle" fill="#a3162d" font-family="Courier Prime" font-size="7" font-weight="700" opacity=".75">1962</text>
+      </svg>
+      <h5>戳章版</h5>
+    </div>
+  </div>
+
+  <div class="callout" style="background:var(--paper-warm);max-width:900px;margin:32px auto;color:var(--ink);">
+    <strong>應用層級：</strong>封面主標 96 級 / 文創包裝 / 餐飲店面 / 社群行銷 / 影片字幕 / AR 集章兌換 NFT
+  </div>
+
+  <div style="text-align:center;margin-top:32px;">
+    <a href="../index.html" class="btn btn-primary">◂ 回首頁</a>
+    <a href="games.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military);margin-left:12px;">勳章拼圖遊戲 ▸</a>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P7 · 1.3 LOGO 解析：桃花飛機・等你回家・黑貓勳章</small>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+// 勳章 3D 互動 - 滑鼠跟隨
+const inner = document.getElementById('medalInner');
+const stage = document.getElementById('stage');
+let bx = 0, by = 0;
+stage.addEventListener('mousemove', e => {
+  const r = stage.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5;
+  const y = (e.clientY - r.top) / r.height - 0.5;
+  bx = x * 30;
+  by = -y * 30;
+  inner.style.transform = `rotateY(${bx}deg) rotateX(${by}deg)`;
+});
+stage.addEventListener('mouseleave', () => {
+  inner.style.transform = '';
+});
+
+// 拖曳支援
+let dragging = false, sx = 0, sy = 0, rx = 0, ry = 0;
+inner.addEventListener('pointerdown', e => {
+  dragging = true; sx = e.clientX; sy = e.clientY;
+  inner.setPointerCapture(e.pointerId);
+});
+inner.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  rx = (e.clientY - sy) * -.5;
+  ry = (e.clientX - sx) * .5;
+  inner.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+});
+inner.addEventListener('pointerup', () => dragging = false);
+</script>
+</body>
+</html>

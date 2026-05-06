@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>黑貓中隊 1961–1974 — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  /* 時間軸樣式 */
+  .timeline {
+    position: relative;
+    max-width: 920px;
+    margin: 48px auto;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--khaki), var(--military), var(--crimson));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 36px;
+    padding: 20px 24px;
+    background: var(--paper);
+    border-left: 4px solid var(--khaki);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .tl-item:hover { transform: translateX(4px); box-shadow: var(--shadow-deep); }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -34px; top: 24px;
+    width: 14px; height: 14px;
+    background: var(--khaki);
+    border: 3px solid var(--paper);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--khaki);
+  }
+  .tl-item.peak::before { background: var(--crimson); box-shadow: 0 0 0 2px var(--crimson); }
+  .tl-year {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--military-deep);
+    letter-spacing: 4px;
+  }
+  .tl-title { font-family: var(--serif-tc); font-size: 19px; letter-spacing: 3px; margin: 6px 0 8px; color: var(--ink); }
+  .tl-body { font-size: 14px; line-height: 1.8; }
+  .tl-tag { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 2px 8px; background: var(--ink); color: var(--paper); margin-right: 6px; }
+
+  /* 史實要點清單 */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .fact {
+    background: var(--paper-warm);
+    padding: 18px 20px;
+    border-left: 3px solid var(--military);
+    font-size: 14px;
+  }
+  .fact-num {
+    font-family: var(--display);
+    font-size: 28px;
+    color: var(--khaki-deep);
+    font-weight: 800;
+    margin-right: 8px;
+  }
+
+  /* U-2 規格區塊 */
+  .u2-spec {
+    background: var(--night);
+    color: var(--paper);
+    padding: 40px;
+    margin: 48px 0;
+    position: relative;
+    border: 1px solid var(--khaki);
+    overflow: hidden;
+  }
+  .u2-spec::before {
+    content: 'TOP SECRET';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-family: var(--display);
+    color: var(--crimson);
+    border: 2px solid var(--crimson);
+    padding: 4px 12px; font-size: 12px; letter-spacing: 4px;
+    transform: rotate(2deg);
+    font-weight: 800;
+  }
+  .u2-spec h3 { color: var(--khaki); border: none; }
+  .u2-spec table { width: 100%; }
+  .u2-spec td { padding: 10px 14px; border-bottom: 1px dashed rgba(201,169,97,.3); font-family: var(--mono); font-size: 13px; }
+  .u2-spec td:first-child { color: var(--khaki); width: 40%; letter-spacing: 2px; }
+
+  /* 紀念區 */
+  .memorial {
+    background: linear-gradient(135deg, var(--night-deep) 0%, var(--cyan-ink) 100%);
+    color: var(--paper);
+    padding: 48px;
+    margin: 48px 0;
+    text-align: center;
+    border-top: 4px solid var(--crimson);
+  }
+  .memorial h3 { color: var(--khaki); border: none; }
+  .memorial p { font-family: var(--serif-tc); letter-spacing: 4px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter1-positioning.html">城市定位</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter3-vr.html">VR 場景</a></li>
+    <li><a href="chapter3-ai.html">AI 對話</a></li>
+    <li><a href="medal.html">勳章 LOGO</a></li>
+    <li><a href="games.html">互動遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 2.1 · BLACK CAT SQUADRON</p>
+  <h1>黑貓中隊</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 議題背景 / 黑貓中隊歷史 [L1] · P8</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="callout">
+  <p>黑貓中隊正式番號為<strong>中華民國空軍第 35 中隊</strong>，於 <strong>1961 年</strong>成軍，駐紮<strong>桃園空軍基地</strong>，由中央情報局（CIA）與中華民國空軍合作組訓，執行對中國大陸戰略偵察任務，主力機型為<strong>洛克希德 U-2 高空偵察機</strong>。中隊運作期間累積飛行架次與情報蒐集成果，亦付出多名飛行員犧牲之代價。<strong>1974 年</strong>因國際局勢轉變（中美關係正常化、衛星偵察興起）而解散。</p>
+</div>
+
+<h2>年代軸線 · 1955 → 2026</h2>
+<p class="muted">三個時間錨點：成軍（1961）、解散（1974）、本案啟動（2026）。標示見證者高齡化最後窗口。</p>
+
+<div class="timeline">
+  <div class="tl-item">
+    <div class="tl-year">1955</div>
+    <div class="tl-title">籌備期</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>美中情報合作框架成形，初期人員選拔與訓練開始醞釀。</div>
+  </div>
+  <div class="tl-item peak">
+    <div class="tl-year">1961 ★</div>
+    <div class="tl-title">成軍 — 中華民國空軍第 35 中隊</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>於桃園空軍基地正式成軍。冷戰高峰、台海情勢交織。部隊代號「黑貓 Black Cat」，與美國中央情報局（CIA）合作組訓。</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-year">1962</div>
+    <div class="tl-title">首航 — U-2 高空偵察起飛</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>主力機型洛克希德 U-2 由美方提供。執行對中國大陸高空戰略偵察。座艙壓力比月球表面還低。</div>
+  </div>
+  <div class="tl-item peak">
+    <div class="tl-year">1960s</div>
+    <div class="tl-title">高峰 — 任務密度最高</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>U-2 高空偵察任務密度最高的時期。「飛 7 萬呎以上，恐懼變成程序。」與《一把青》劇情中段的「等待與失去高峰」於敘事上交集。</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-year">1970s</div>
+    <div class="tl-title">縮減 — 衛星偵察興起</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>隨國際局勢變化與衛星偵察技術成熟，U-2 任務逐步縮減。</div>
+  </div>
+  <div class="tl-item peak">
+    <div class="tl-year">1974 ★</div>
+    <div class="tl-title">解散</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>因中美關係正常化進程與衛星偵察興起，黑貓中隊正式解散。第 35 中隊番號封存。</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-year">2010s</div>
+    <div class="tl-title">解密與紀念</div>
+    <div class="tl-body"><span class="tl-tag">[L1]</span>國防部解密文件公開週期 50 年，CIA 解密 U-2 對華偵察任務公開部分。國家檔案管理局公開檔案。</div>
+  </div>
+  <div class="tl-item peak">
+    <div class="tl-year">2026 ★</div>
+    <div class="tl-title">本案啟動 — 等待的天空</div>
+    <div class="tl-body"><span class="tl-tag">[L3]</span>桃園航空城建設階段性節點 + 黑貓見證者多 80+ 口述史最後窗口 + 生成式 AI 與 XR 抵達消費級拐點 + ESG 政策窗口。<strong>四時間軸交集於 2026。</strong></div>
+  </div>
+</div>
+
+<h2>史實要點 · 10 條</h2>
+<div class="facts-grid">
+  <div class="fact"><span class="fact-num">01</span>成軍年份：<strong>1961</strong>（冷戰高峰、台海情勢交織）<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">02</span>正式番號：<strong>中華民國空軍第 35 中隊</strong>；部隊代號「黑貓」<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">03</span>駐紮地點：<strong>桃園空軍基地</strong>（現桃園機場周邊）<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">04</span>主力機型：<strong>洛克希德 U-2</strong> 高空偵察機（美方提供）<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">05</span>任務性質：對中國大陸高空戰略偵察<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">06</span>夥伴關係：與美國<strong>中央情報局（CIA）</strong>合作組訓<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">07</span>解散年份：<strong>1974</strong><span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">08</span>犧牲飛行員：殉職與被擊落者多名（具體名單依國防部公開資料）<span class="tag">[L1]</span><span class="tag">[L4]</span></div>
+  <div class="fact"><span class="fact-num">09</span>現存文物：U-2 機體、飛行裝備、任務紀錄（分散保存）<span class="tag">[L1]</span></div>
+  <div class="fact"><span class="fact-num">10</span>見證者：現存退役者平均年齡 <strong>80 歲以上</strong><span class="tag">[L3]</span></div>
+</div>
+
+<div class="u2-spec">
+  <h3>洛克希德 U-2 · 公開規格 [L1]</h3>
+  <table>
+    <tr><td>機型代號</td><td>Lockheed U-2 "Dragon Lady"</td></tr>
+    <tr><td>飛行高度</td><td>70,000 呎以上（21,300 公尺）</td></tr>
+    <tr><td>機種定位</td><td>高空戰略偵察機</td></tr>
+    <tr><td>作戰方式</td><td>單座 · 單發動機 · 噴射推進</td></tr>
+    <tr><td>提供方</td><td>美國洛克希德公司 / CIA 提供中華民國空軍</td></tr>
+    <tr><td>作戰半徑</td><td>長航程偵察 · 對中國大陸戰略目標</td></tr>
+    <tr><td>主要任務</td><td>高空戰略偵察 · 影像情報蒐集</td></tr>
+    <tr><td>飛行員待遇</td><td>座艙壓力極低 · 太空衣壓力服 · 7+ 小時單獨任務</td></tr>
+  </table>
+</div>
+
+<div class="memorial">
+  <h3>★ 致敬殉職飛官</h3>
+  <p style="font-size:20px;line-height:2;">飛 7 萬呎以上，<br/>座艙壓力比月球表面還低。<br/>你問我怕？<br/><strong style="color:var(--peach-light)">恐懼變成程序。</strong></p>
+  <small style="display:block;margin-top:24px;font-family:var(--mono);opacity:.7;letter-spacing:2px;">— 見證者口述史 #017，1965 任務後採訪片段 [L1]</small>
+  <p style="margin-top:24px;font-family:var(--mono);font-size:13px;letter-spacing:3px;opacity:.85;">具體殉職名單依國防部公開資料 / Phase 1 完成 L4-1 補齊與審稿</p>
+</div>
+
+<h2>桃園基地・地理唯一性</h2>
+<p>黑貓中隊原桃園基地地理唯一性是本案的<strong>S3 優勢</strong>（SWOT 分析）— 黑貓 + 一把青 + 航空城三 IP 在 1960s 桃園基地時空交集，這是桃園不能被複製的城市資產。</p>
+
+<div class="callout callout-warn">
+  <strong>邊界宣示：</strong>本案僅以《一把青》為「同時代精神參照」，<strong>不將虛構角色與真實隊員對應</strong>，亦不虛構未出現之劇情與台詞。AI 互動採 RAG 錨定真實 corpus，禁止自由生成歷史人物言論。
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter2-yibaqing.html" class="btn btn-primary">▸ 一把青文化座標</a>
+  <a href="chapter3-vr.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">VR 6 場景沉浸</a>
+  <a href="medal.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">勳章 LOGO 解析</a>
+</div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P8 / 25 · 2.1 黑貓中隊歷史背景 [L1]</small>
+  </div>
+</footer>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

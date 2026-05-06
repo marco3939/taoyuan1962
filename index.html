@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>等待的天空 — 桃園 XR+AI 永續航線文創園區</title>
+<meta name="description" content="飛過冷戰，等你回家 — 桃園航空城 黑貓中隊紀念互動 XR+AI 文創園區" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/animations.css" />
+</head>
+<body class="page-home">
+
+<!-- 頂部導覽 -->
+<nav class="topnav" id="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-medal">★</span>
+      <span class="brand-text">
+        <span class="brand-cn">等待的天空</span>
+        <span class="brand-en">Waiting Sky · Taoyuan</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="選單" onclick="document.body.classList.toggle('nav-open')">☰</button>
+    <ul class="nav-list">
+      <li><a href="pages/executive-summary.html">執行摘要</a></li>
+      <li class="has-sub"><a href="#">城市定位 ▾</a>
+        <ul>
+          <li><a href="pages/chapter1-positioning.html">PEST · SWOT 分析</a></li>
+        </ul>
+      </li>
+      <li class="has-sub"><a href="#">議題背景 ▾</a>
+        <ul>
+          <li><a href="pages/chapter2-history.html">黑貓中隊 1961–1974</a></li>
+          <li><a href="pages/chapter2-yibaqing.html">《一把青》文化座標</a></li>
+          <li><a href="pages/chapter2-venue.html">場館前後對照</a></li>
+        </ul>
+      </li>
+      <li class="has-sub"><a href="#">四維融合 ▾</a>
+        <ul>
+          <li><a href="pages/chapter3-vr.html">VR 6 場景</a></li>
+          <li><a href="pages/chapter3-ar.html">AR 5 城市點位</a></li>
+          <li><a href="pages/chapter3-ai.html">AI 對話 RAG</a></li>
+          <li><a href="pages/chapter3-cultural.html">文創 8 業種</a></li>
+          <li><a href="pages/chapter3-dining.html">5 餐飲品牌</a></li>
+          <li><a href="pages/chapter3-marketing.html">推廣矩陣</a></li>
+        </ul>
+      </li>
+      <li><a href="pages/chapter4-feasibility.html">可行性與預算</a></li>
+      <li><a href="pages/medal.html">勳章 LOGO</a></li>
+      <li><a href="pages/games.html">互動遊戲</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO 等待的天空 -->
+<header class="hero">
+  <div class="hero-sky">
+    <div class="stars"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="u2-trail">
+      <svg viewBox="0 0 200 30" class="contrail">
+        <path d="M0,15 Q100,0 200,15" stroke="rgba(244,235,208,0.6)" stroke-width="0.5" fill="none" stroke-dasharray="2 4"/>
+      </svg>
+      <div class="u2-dot"></div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="medal-badge" id="medal3d">
+      <svg viewBox="0 0 240 280" class="medal-svg" aria-label="桃花飛機勳章">
+        <!-- 勳帶 -->
+        <path d="M40,0 L120,40 L200,0 L200,30 L120,80 L40,30 Z" fill="#4a5d3a" stroke="#c9a961" stroke-width="1.5"/>
+        <text x="120" y="22" text-anchor="middle" fill="#f4ebd0" font-family="Noto Serif TC" font-weight="700" font-size="14" letter-spacing="6">等你回家</text>
+        <!-- 盾牌主體 -->
+        <path d="M120,55 L210,90 L210,180 Q210,230 120,270 Q30,230 30,180 L30,90 Z"
+              fill="#f4ebd0" stroke="#3a2817" stroke-width="2"/>
+        <path d="M120,65 L200,95 L200,180 Q200,222 120,258 Q40,222 40,180 L40,95 Z"
+              fill="none" stroke="#c9a961" stroke-width="1.2"/>
+        <!-- 桃花環繞 -->
+        <g class="petal-ring">
+          <circle cx="60" cy="120" r="9" fill="#e8a4b8" opacity="0.85"/>
+          <circle cx="180" cy="120" r="9" fill="#e8a4b8" opacity="0.85"/>
+          <circle cx="60" cy="200" r="9" fill="#f4c7c3" opacity="0.85"/>
+          <circle cx="180" cy="200" r="9" fill="#f4c7c3" opacity="0.85"/>
+          <circle cx="120" cy="100" r="8" fill="#e8a4b8" opacity="0.7"/>
+          <circle cx="120" cy="220" r="8" fill="#f4c7c3" opacity="0.7"/>
+        </g>
+        <!-- 戰機剪影 -->
+        <g transform="translate(120,160)">
+          <path d="M-50,0 L0,-6 L50,0 L0,6 Z" fill="#4a5d3a"/>
+          <path d="M-8,-22 L0,-30 L8,-22 L8,18 L-8,18 Z" fill="#4a5d3a"/>
+          <path d="M-30,-2 L30,-2 L30,2 L-30,2 Z" fill="#3a4a2a"/>
+        </g>
+        <!-- 黑貓眼睛 -->
+        <g transform="translate(120,150)">
+          <ellipse cx="-12" cy="0" rx="6" ry="9" fill="#1a1a1a"/>
+          <ellipse cx="12" cy="0" rx="6" ry="9" fill="#1a1a1a"/>
+          <ellipse cx="-12" cy="-2" rx="2" ry="4" fill="#c9a961"/>
+          <ellipse cx="12" cy="-2" rx="2" ry="4" fill="#c9a961"/>
+        </g>
+        <!-- TAOYUAN 1962 標牌 -->
+        <rect x="50" y="232" width="140" height="22" rx="2" fill="#3a4a2a" stroke="#c9a961" stroke-width="1"/>
+        <text x="120" y="248" text-anchor="middle" fill="#f4ebd0" font-family="Cinzel" font-weight="800" font-size="13" letter-spacing="3">TAOYUAN · 1962</text>
+      </svg>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="title-cn">等待的天空</span>
+      <span class="title-en">Waiting Sky</span>
+    </h1>
+    <p class="hero-slogan">飛過冷戰，等你回家</p>
+    <p class="hero-slogan-en"><em>Beyond Cold War, Waiting for Home</em></p>
+
+    <div class="hero-meta">
+      <span>桃園 XR + AI 永續航線文創園區</span>
+      <span class="dot">·</span>
+      <span>2026 城市行銷企劃 STAGE 2</span>
+      <span class="dot">·</span>
+      <span>v5.6 勳章版</span>
+    </div>
+
+    <div class="hero-cta">
+      <a href="pages/executive-summary.html" class="btn btn-primary">進入企劃 ▸</a>
+      <a href="pages/chapter2-history.html" class="btn btn-ghost">黑貓中隊歷史</a>
+      <a href="pages/games.html" class="btn btn-ghost">互動遊戲</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint" onclick="document.querySelector('#three-themes').scrollIntoView({behavior:'smooth'})">
+    <span>三大子議題</span>
+    <span class="arrow">▾</span>
+  </div>
+</header>
+
+<!-- 三大子議題 -->
+<section class="themes" id="three-themes">
+  <div class="section-head">
+    <span class="kicker">CORE NARRATIVE</span>
+    <h2>三大子議題</h2>
+    <p class="lede">穿越 1962 與 2026 的桃園天空，每一次起飛與降落都是一場等待的詩。</p>
+  </div>
+
+  <div class="theme-grid">
+    <a class="theme-card theme-coldwar" href="pages/chapter2-history.html">
+      <div class="theme-mark">★</div>
+      <h3>冷戰之天</h3>
+      <p class="theme-en">Cold War Sky</p>
+      <p class="theme-ip">黑貓中隊 + U-2 高空偵察機 <span class="tag">[L1]</span></p>
+      <p class="theme-mood">孤獨 · 專注 · 任務感</p>
+      <span class="cta">進入歷史 ▸</span>
+    </a>
+
+    <a class="theme-card theme-village" href="pages/chapter2-yibaqing.html">
+      <div class="theme-mark">♥</div>
+      <h3>眷村之心</h3>
+      <p class="theme-en">Hearts of Eldercom</p>
+      <p class="theme-ip">《一把青》 + 飛行員家屬 <span class="tag">[L2]</span></p>
+      <p class="theme-mood">等待 · 牽掛 · 韌性</p>
+      <span class="cta">圍牆外的等待 ▸</span>
+    </a>
+
+    <a class="theme-card theme-memory" href="pages/chapter3-ar.html">
+      <div class="theme-mark">✈</div>
+      <h3>記憶之航</h3>
+      <p class="theme-en">Memory Voyage</p>
+      <p class="theme-ip">桃園作為國門與時代見證</p>
+      <p class="theme-mood">結構 · 反思 · 回家</p>
+      <span class="cta">城市點位 ▸</span>
+    </a>
+  </div>
+</section>
+
+<!-- 四維融合 -->
+<section class="four-dim">
+  <div class="section-head">
+    <span class="kicker">CHAPTER 3 · 創新概念</span>
+    <h2>四維融合 — XR × AI × 文創 × 餐飲</h2>
+    <p class="lede">以 XR + AI 為時空艙，以文創園區為時代街區；讓觀眾穿越冷戰天空，並在眷村餐桌延續記憶。</p>
+  </div>
+
+  <div class="dim-cross">
+    <div class="dim dim-x"><span class="dim-icon">🥽</span><h4>X · 虛擬</h4><p>VR 6DoF 沉浸 — 6 場景場館內深度敘事</p><a href="pages/chapter3-vr.html">VR 場景 ▸</a><small>SDG 9, 11</small></div>
+    <div class="dim dim-r"><span class="dim-icon">📱</span><h4>R · 擴增</h4><p>AR 5 城市點位 — 場館外時空延伸</p><a href="pages/chapter3-ar.html">AR 點位 ▸</a><small>SDG 11, 12</small></div>
+    <div class="dim dim-a"><span class="dim-icon">🤖</span><h4>A · 智慧</h4><p>AI Chatbot + RAG — 個人化、多語、情緒適應</p><a href="pages/chapter3-ai.html">AI 對話 ▸</a><small>SDG 4, 9</small></div>
+    <div class="dim dim-c"><span class="dim-icon">🍜</span><h4>C · 文創</h4><p>8 業種攤商 + 5 餐飲品牌 — 五感閉環</p><a href="pages/chapter3-cultural.html">街區 ▸</a><small>SDG 8, 11, 12, 17</small></div>
+    <div class="dim-core">
+      <div class="dim-core-inner">
+        <span>等待的天空</span>
+        <small>Waiting Sky</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI 速覽 -->
+<section class="kpi-strip">
+  <div class="section-head">
+    <span class="kicker">EXECUTIVE SUMMARY</span>
+    <h2>KPI 速覽 · 三時期</h2>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-num" data-target="30">0</span><span class="kpi-suffix">萬</span><span class="kpi-label">入館人次 Y1</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="60">0</span><span class="kpi-suffix">萬</span><span class="kpi-label">入館人次 Y3</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="90">0</span><span class="kpi-suffix">萬</span><span class="kpi-label">入館人次 Y5</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="4">0</span><span class="kpi-suffix">hr</span><span class="kpi-label">平均停留 Y5</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="110">0</span><span class="kpi-suffix">人</span><span class="kpi-label">在地就業 Y5</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="2">0</span><span class="kpi-suffix">噸</span><span class="kpi-label">減碳 CO₂e</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="6">0</span><span class="kpi-suffix">項</span><span class="kpi-label">SDGs 對應</span></div>
+    <div class="kpi"><span class="kpi-num" data-target="8000">0</span><span class="kpi-suffix">萬</span><span class="kpi-label">總投資 NTD</span></div>
+  </div>
+</section>
+
+<!-- 體驗節奏 -->
+<section class="rhythm">
+  <div class="section-head">
+    <span class="kicker">EXPERIENCE FLOW</span>
+    <h2>體驗節奏 · 行前 → 入館 → 戶外 → 出館</h2>
+  </div>
+  <ol class="rhythm-flow">
+    <li><span class="phase">行前</span><h5>AI Chatbot</h5><p>個人化推薦、票務客服、行前知識</p></li>
+    <li><span class="phase">入館</span><h5>AI 導覽 + VR 沉浸</h5><p>動線推薦、深度敘事、情緒適應</p></li>
+    <li><span class="phase">用餐 / 購物</span><h5>AI + 文創園區攤商系統</h5><p>攤商推薦、餐飲時代故事推送</p></li>
+    <li><span class="phase">戶外擴散</span><h5>AR + AI</h5><p>城市點位探索、集章兌獎</p></li>
+    <li><span class="phase">出館</span><h5>AI 生成回顧</h5><p>體驗摘要、社群短影音、回訪推薦</p></li>
+  </ol>
+</section>
+
+<!-- 五步思維鏈 -->
+<section class="five-steps">
+  <div class="section-head">
+    <span class="kicker">PRE-PROPOSAL CHAIN-OF-THOUGHT</span>
+    <h2>企劃前思維鏈 · 五步推理</h2>
+  </div>
+  <div class="step-grid">
+    <div class="step"><b>Step 1</b><h5>城市診斷</h5><p>桃園被「機場過境地」與「工業重鎮」二元覆蓋，缺乏旅客「願意停留」的文化錨點。航空文化城市為空白市場。</p></div>
+    <div class="step"><b>Step 2</b><h5>技術整合邏輯</h5><p>VR 提供場館內深度沉浸 · AR 提供城市擴散 · AI(RAG) 提供個人化對話。三者非互斥而是接力。</p></div>
+    <div class="step"><b>Step 3</b><h5>商業生態必要性</h5><p>8 大攤商業種 + 5 大餐飲品牌 = 「歷史→體驗→消費→記憶」閉環。停留 ≥3 小時。</p></div>
+    <div class="step"><b>Step 4</b><h5>永續必要性</h5><p>ESG 不是附加章節而是設計原則。對應 SDGs 6 項 (4/8/9/11/12/17)。</p></div>
+    <div class="step"><b>Step 5</b><h5>時機必要性</h5><p>2026 為四時間軸交集 — 航空城建設、見證者高齡化、XR/AI 拐點、ESG 政策窗口。</p></div>
+  </div>
+</section>
+
+<!-- 史實邊界協定 -->
+<section class="boundary">
+  <div class="section-head">
+    <span class="kicker">HISTORICAL BOUNDARY PROTOCOL</span>
+    <h2>史實邊界協定</h2>
+  </div>
+  <ul class="boundary-list">
+    <li><span class="lvl l1">[L1]</span> 公開史實 — 國防部、CIA 解密文件、國家檔案管理局</li>
+    <li><span class="lvl l2">[L2]</span> 文本脈絡 — 白先勇《一把青》、公視 2015 影視 IP</li>
+    <li><span class="lvl l3">[L3]</span> 提案推論 — KPI 推估、設計擴展、創作改編</li>
+    <li><span class="lvl l4">[L4]</span> 缺資料待補 — Phase 1 完成 L4 補齊與三大顧問群審稿</li>
+  </ul>
+</section>
+
+<!-- Footer -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div>
+      <p class="foot-brand">★ 黑貓任務小組</p>
+      <p class="foot-sub">飛過冷戰，等你回家 · v5.6</p>
+      <p class="foot-sub small">Beyond Cold War, Waiting for Home</p>
+    </div>
+    <div>
+      <h6>章節導覽</h6>
+      <ul>
+        <li><a href="pages/executive-summary.html">執行摘要 P3-4</a></li>
+        <li><a href="pages/chapter1-positioning.html">城市定位 P5-7</a></li>
+        <li><a href="pages/chapter2-history.html">黑貓中隊 P8</a></li>
+        <li><a href="pages/chapter2-yibaqing.html">一把青 P9</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6>四維融合</h6>
+      <ul>
+        <li><a href="pages/chapter3-vr.html">VR 場景 P12</a></li>
+        <li><a href="pages/chapter3-ar.html">AR 點位 P13</a></li>
+        <li><a href="pages/chapter3-ai.html">AI 互動 P14</a></li>
+        <li><a href="pages/chapter3-dining.html">餐飲品牌 P16</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6>體驗</h6>
+      <ul>
+        <li><a href="pages/medal.html">桃花飛機勳章</a></li>
+        <li><a href="pages/games.html">互動遊戲中心</a></li>
+        <li><a href="pages/chapter4-feasibility.html">預算 8,000 萬</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <small>本提案符合大會匿名審查規定 · 提報日期: 中華民國 115 年(2026) 5 月 6 日 · 提交期限: 2026 年 5 月 27 日 12:00</small>
+    <small>AI 倫理聲明: AI 互動採 RAG 錨定真實 corpus，禁止自由生成歷史人物言論。</small>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

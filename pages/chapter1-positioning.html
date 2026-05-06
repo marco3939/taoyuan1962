@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>城市定位 PEST/SWOT — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  /* SWOT 四象限 */
+  .swot {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .swot-cell {
+    padding: 24px;
+    border: 2px solid;
+    background: var(--paper);
+    min-height: 240px;
+  }
+  .swot-s { border-color: var(--military); background: linear-gradient(135deg, var(--paper) 0%, rgba(74,93,58,.1) 100%); }
+  .swot-w { border-color: var(--khaki-deep); background: linear-gradient(135deg, var(--paper) 0%, rgba(168,137,63,.1) 100%); }
+  .swot-o { border-color: var(--peach-deep); background: linear-gradient(135deg, var(--paper) 0%, rgba(201,122,142,.1) 100%); }
+  .swot-t { border-color: var(--crimson); background: linear-gradient(135deg, var(--paper) 0%, rgba(163,22,45,.08) 100%); }
+  .swot-cell h4 { font-family: var(--serif-tc); font-size: 22px; letter-spacing: 4px; margin-bottom: 16px; }
+  .swot-cell ul { list-style: none; }
+  .swot-cell li { padding: 6px 0 6px 22px; position: relative; font-size: 14px; line-height: 1.6; }
+  .swot-cell li::before { content: '◆'; position: absolute; left: 0; color: var(--khaki-deep); }
+  @media (max-width: 720px) { .swot { grid-template-columns: 1fr; } }
+
+  /* PEST 卡片 */
+  .pest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .pest-card {
+    background: var(--paper-warm);
+    padding: 24px;
+    border-top: 4px solid var(--military);
+  }
+  .pest-letter { font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--military-deep); line-height: 1; }
+
+  /* 雷達圖 */
+  .radar-chart-wrap {
+    display: flex; justify-content: center; margin: 32px 0;
+  }
+  .radar-chart {
+    width: 460px; max-width: 100%;
+    aspect-ratio: 1;
+    position: relative;
+  }
+  .radar-chart svg { width: 100%; height: 100%; }
+  .radar-legend {
+    display: flex; gap: 18px; margin-top: 16px; justify-content: center; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 1px;
+  }
+  .radar-legend span { display: flex; align-items: center; gap: 6px; }
+  .lg-dot { width: 12px; height: 12px; display: inline-block; border-radius: 2px; }
+
+  /* 雙軸定位 */
+  .axis-map {
+    background: var(--paper-warm);
+    padding: 32px;
+    margin: 32px 0;
+    position: relative;
+    height: 480px;
+    border: 1px solid var(--khaki);
+  }
+  .axis-map .axis-h, .axis-map .axis-v {
+    position: absolute;
+    background: var(--khaki-deep);
+  }
+  .axis-h { left: 8%; right: 8%; top: 50%; height: 2px; }
+  .axis-v { top: 8%; bottom: 8%; left: 50%; width: 2px; }
+  .axis-label { position: absolute; font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--ink); }
+  .axis-map .label-x-l { left: 12px; top: 48%; }
+  .axis-map .label-x-r { right: 12px; top: 48%; }
+  .axis-map .label-y-t { left: 50%; top: 12px; transform: translateX(-50%); }
+  .axis-map .label-y-b { left: 50%; bottom: 12px; transform: translateX(-50%); }
+  .pin {
+    position: absolute;
+    width: 110px;
+    padding: 8px 10px;
+    background: var(--paper);
+    border: 1px solid var(--khaki);
+    font-size: 11px; line-height: 1.4;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transform: translate(-50%, -50%);
+  }
+  .pin.us { background: var(--military); color: var(--paper); border-color: var(--gold); font-weight: 700; }
+  .pin small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; opacity: .8; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter1-positioning.html">城市定位</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter3-vr.html">VR 場景</a></li>
+    <li><a href="medal.html">勳章 LOGO</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 1 · CITY POSITIONING</p>
+  <h1>城市定位</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 第一章 城市品牌形象與定位設定 · P5–7</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<h2>1.1 桃園市現況 PEST 分析</h2>
+<div class="pest-grid">
+  <div class="pest-card">
+    <div class="pest-letter">P</div>
+    <h4>政治</h4>
+    <p>桃園航空城開發條例（2009）/ 文化部文創園區補助 / 國防部解密文件公開週期（50 年）/ 文化部數位平權政策 / 金管會 ESG 永續報告書要求</p>
+  </div>
+  <div class="pest-card">
+    <div class="pest-letter">E</div>
+    <h4>經濟</h4>
+    <p>桃機年旅客 ≈ 4,500 萬人次 [L3] / 平均停留時間短（過境為主）/ 文創產業政策補助 / 桃園 GDP 全台第三 [L3] / 機捷沿線消費力升級</p>
+  </div>
+  <div class="pest-card">
+    <div class="pest-letter">S</div>
+    <h4>社會</h4>
+    <p>多元族群城市（原住民、客家、閩南、外省、新住民、移工）/ 眷村二代歷史保存意識覺醒 / 後疫情沉浸式體驗需求成長 / 高齡見證者口述史搶救</p>
+  </div>
+  <div class="pest-card">
+    <div class="pest-letter">T</div>
+    <h4>技術</h4>
+    <p>消費級 VR 頭顯成熟（2024–2026 拐點）/ 生成式 AI 與 RAG 普及 / 5G 普及支援戶外 AR / 桃機智慧化建設 / 數位典藏技術成熟</p>
+  </div>
+</div>
+
+<h2>城市競爭力雷達圖 · 桃園 vs 台北 vs 台南</h2>
+<div class="radar-chart-wrap">
+  <div class="radar-chart">
+    <svg viewBox="0 0 400 400">
+      <!-- 六軸 -->
+      <g stroke="#c9a961" stroke-width="0.8" fill="none">
+        <polygon points="200,40 339,120 339,280 200,360 61,280 61,120" />
+        <polygon points="200,80 305,135 305,265 200,320 95,265 95,135" />
+        <polygon points="200,120 270,150 270,250 200,280 130,250 130,150" />
+        <polygon points="200,160 235,170 235,230 200,240 165,230 165,170" />
+      </g>
+      <g stroke="#c9a961" stroke-width="0.5">
+        <line x1="200" y1="40"  x2="200" y2="360" />
+        <line x1="61"  y1="120" x2="339" y2="280" />
+        <line x1="339" y1="120" x2="61"  y2="280" />
+      </g>
+      <!-- 桃園(實線, 軍綠)：產業★ 國際★, 凹陷:文化辨識/觀光 -->
+      <polygon points="200,180 305,135 305,265 200,260 130,250 130,150"
+               fill="rgba(74,93,58,.4)" stroke="#4a5d3a" stroke-width="2.5"/>
+      <!-- 台北(虛線, 桃粉)：文化辨識★ 觀光★ -->
+      <polygon points="200,80 280,150 270,250 200,300 100,260 95,135"
+               fill="rgba(232,164,184,.25)" stroke="#c97a8e" stroke-width="2" stroke-dasharray="4 3"/>
+      <!-- 台南(虛線, 卡其)：文化辨識★ -->
+      <polygon points="200,100 250,170 270,250 200,330 140,250 110,140"
+               fill="rgba(201,169,97,.18)" stroke="#a8893f" stroke-width="2" stroke-dasharray="2 4"/>
+      <!-- 軸標 -->
+      <g font-family="Noto Sans TC" font-size="12" fill="#3a2817" text-anchor="middle">
+        <text x="200" y="28">文化辨識度</text>
+        <text x="350" y="120">觀光吸引力</text>
+        <text x="350" y="288">國際能見度</text>
+        <text x="200" y="382">在地認同</text>
+        <text x="50"  y="288">產業基底</text>
+        <text x="50"  y="120">體驗創新</text>
+      </g>
+    </svg>
+  </div>
+</div>
+<div class="radar-legend">
+  <span><i class="lg-dot" style="background:#4a5d3a"></i> 桃園（本案介入點：文化辨識 / 觀光凹陷）</span>
+  <span><i class="lg-dot" style="background:#c97a8e"></i> 台北</span>
+  <span><i class="lg-dot" style="background:#c9a961"></i> 台南</span>
+</div>
+
+<h2>1.2 SWOT 競爭差異化分析</h2>
+<div class="swot">
+  <div class="swot-cell swot-s">
+    <h4>S 優勢</h4>
+    <ul>
+      <li>S1 桃機國際門戶，客流冠全台 [L1]</li>
+      <li>S2 既存航空場館 + MRO 聚落 [L1]</li>
+      <li>S3 黑貓中隊原桃園基地<strong>地理唯一</strong> [L1]</li>
+      <li>S4 多元族群、外省眷屬二三代 [L1]</li>
+      <li>S5 高鐵 + 機捷雙軌 [L1]</li>
+    </ul>
+  </div>
+  <div class="swot-cell swot-w">
+    <h4>W 弱勢</h4>
+    <ul>
+      <li>W1 文化標誌性不足 [L3]</li>
+      <li>W2 觀光停留時間 &lt;4 hr [L3]</li>
+      <li>W3 黑貓能見度低 [L1]</li>
+      <li>W4 場館分散未串聯</li>
+      <li>W5 既有展示靜態化</li>
+    </ul>
+  </div>
+  <div class="swot-cell swot-o">
+    <h4>O 機會</h4>
+    <ul>
+      <li>O1 桃園航空城建設節點</li>
+      <li>O2 XR + 生成式 AI 雙拐點 [L3]</li>
+      <li>O3 ESG 政策強化（金管會、文化部）</li>
+      <li>O4《一把青》既有跨世代觀眾池 [L2]</li>
+      <li>O5 文化部「再造歷史現場」</li>
+    </ul>
+  </div>
+  <div class="swot-cell swot-t">
+    <h4>T 威脅</h4>
+    <ul>
+      <li>T1 競爭城市同質化</li>
+      <li>T2 IP 授權成本不可控</li>
+      <li>T3 史料考證爭議 [L3]</li>
+      <li>T4 攤商招商不足 / AI 幻覺風險</li>
+      <li>T5 國際情勢突變</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout">
+  <strong>策略對應：</strong>SO = S1+S3 × O1+O2 立即啟動；WO = O4 補 W1；ST = S4+S5 分散 T1；WT = 預備金 3% + ESG 認證 3% 對應 T2+T3+T4 三重外部變數。
+</div>
+
+<h2>雙軸定位地圖 · 藍海象限</h2>
+<p class="muted">X 軸：歷史厚度（古典 ↔ 現代）；Y 軸：體驗形式（靜態 ↔ XR+AI 沉浸）。本案獨佔「現代 × 沉浸 × 永續」第三維藍海。</p>
+
+<div class="axis-map">
+  <span class="axis-h"></span>
+  <span class="axis-v"></span>
+  <span class="axis-label label-x-l">古典史</span>
+  <span class="axis-label label-x-r">現代史</span>
+  <span class="axis-label label-y-t">XR+AI 沉浸</span>
+  <span class="axis-label label-y-b">靜態</span>
+
+  <div class="pin" style="left:18%; top:75%;">台南古都<small>明鄭清領</small></div>
+  <div class="pin" style="left:45%; top:35%;">華山 1914<small>純文創</small></div>
+  <div class="pin" style="left:42%; top:65%;">松山菸廠<small>純實體</small></div>
+  <div class="pin" style="left:32%; top:55%;">寶藏巖<small>藝術村</small></div>
+  <div class="pin us" style="left:78%; top:20%;">★ 等待的天空<small>本案 · 藍海</small></div>
+</div>
+
+<h2>1.3 品牌定位主張</h2>
+<div class="callout-quote" style="font-size:24px;letter-spacing:8px;">
+  飛過冷戰，等你回家<br/>
+  <span style="font-size:14px;letter-spacing:6px;color:var(--khaki)">Beyond Cold War, Waiting for Home</span>
+</div>
+
+<h3>SLOGAN 設計理由</h3>
+<table class="spec-table">
+  <tr><th>字數</th><td>8 字內（易記憶）</td></tr>
+  <tr><th>雙關性</th><td>「回家」= 飛行員歸返 + 接機 + 在地認同</td></tr>
+  <tr><th>情感錨點</th><td>等待 + 回家 = 普世共鳴</td></tr>
+  <tr><th>對仗結構</th><td>飛過 ↔ 等你 / 冷戰 ↔ 回家</td></tr>
+  <tr><th>多語版本</th><td>中：飛過冷戰，等你回家 / 英：Beyond Cold War, Waiting for Home / 日：冷戦の空を越え、家路を待つ</td></tr>
+</table>
+
+<h3>關鍵城市資產</h3>
+<table class="spec-table">
+  <thead><tr><th>資產類別</th><th>具體項目</th><th>對應子議題</th></tr></thead>
+  <tbody>
+    <tr><td>歷史 IP</td><td>黑貓中隊、《一把青》、桃機歷史</td><td>冷戰之天 / 眷村之心</td></tr>
+    <tr><td>場域</td><td>桃園航空城博物館、桃機、空軍基地舊址、眷村文化園區</td><td>全主題</td></tr>
+    <tr><td>文化</td><td>眷村文化、外省/本省/原民交集</td><td>眷村之心</td></tr>
+    <tr><td>產業</td><td>航空城開發、文創產業</td><td>記憶之航</td></tr>
+    <tr><td>自然</td><td>桃花、台灣藍鵲（市鳥）、慈湖</td><td>LOGO 元素</td></tr>
+    <tr><td>交通</td><td>桃機、機捷、高鐵、國道</td><td>區位優勢</td></tr>
+  </tbody>
+</table>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="executive-summary.html" class="btn btn-primary">◂ 執行摘要</a>
+  <a href="chapter2-history.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">黑貓中隊歷史 ▸</a>
+  <a href="medal.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">桃花飛機 LOGO 解析</a>
+</div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P5–7 / 25 · 第一章 城市品牌形象與定位設定</small>
+  </div>
+</footer>
+</div>
+<script src="../js/main.js"></script>
+</body>
+</html>

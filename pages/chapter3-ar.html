@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AR 5 城市點位 — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  /* AR 地圖 */
+  .ar-map-wrap {
+    background: linear-gradient(135deg, #d8e4d8 0%, #c4d4c0 100%);
+    padding: 24px;
+    margin: 32px 0;
+    border: 1px solid var(--khaki);
+    position: relative;
+  }
+  .ar-map {
+    width: 100%; aspect-ratio: 16/10;
+    background: var(--paper-warm);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+  }
+  .map-svg { width: 100%; height: 100%; display: block; }
+  .ar-pin {
+    position: absolute;
+    width: 36px; height: 36px;
+    transform: translate(-50%, -100%);
+    cursor: pointer;
+    z-index: 5;
+  }
+  .ar-pin .dot {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 18px; height: 18px;
+    background: var(--crimson);
+    border: 3px solid var(--paper);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  }
+  .ar-pin::before {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 30px; height: 30px;
+    border: 2px solid var(--crimson);
+    border-radius: 50%;
+    animation: pulseDot 2s infinite;
+  }
+  .ar-pin .label {
+    position: absolute;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink); color: var(--paper);
+    padding: 4px 10px; font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    box-shadow: var(--shadow-card);
+  }
+  .ar-pin .label::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .ar-pin:hover { z-index: 10; }
+  .ar-pin:hover .dot { transform: translateX(-50%) scale(1.3); }
+
+  /* 點位卡片 */
+  .ar-station-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 32px 0;
+  }
+  .ar-station {
+    background: var(--paper);
+    border: 1px solid var(--khaki);
+    padding: 24px;
+    position: relative;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ar-station:hover { transform: translateY(-4px); box-shadow: var(--shadow-deep); }
+  .ar-station h4 { font-family: var(--serif-tc); font-size: 19px; letter-spacing: 3px; margin-bottom: 6px; }
+  .ar-station .id-tag {
+    display: inline-block;
+    font-family: var(--display);
+    background: var(--crimson);
+    color: var(--paper);
+    padding: 4px 10px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    font-weight: 800;
+  }
+  .ar-station .loc { font-family: var(--mono); font-size: 12px; color: var(--khaki-deep); margin-bottom: 12px; letter-spacing: 1px; }
+  .ar-station p { font-size: 14px; line-height: 1.7; }
+
+  /* 教育包 */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .edu-card {
+    background: var(--paper-warm);
+    padding: 20px;
+    border-top: 4px solid var(--peach-deep);
+    text-align: center;
+  }
+  .edu-icon { font-size: 36px; margin-bottom: 8px; }
+  .edu-card h5 { font-family: var(--serif-tc); font-size: 17px; letter-spacing: 3px; margin-bottom: 8px; }
+  .edu-card p { font-size: 13px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter3-vr.html">VR 場景</a></li>
+    <li><a href="chapter3-ar.html">AR 點位</a></li>
+    <li><a href="chapter3-ai.html">AI 對話</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 3.3 · AR OUTDOOR EXPANSION</p>
+  <h1>AR 城市 5 點位</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 四維融合 / AR 戶外擴增體驗 · P13</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="callout">
+  <strong>從場館擴散至城市 ·</strong> AR 戶外擴增體驗將「等待的天空」從博物館內延伸到桃園全市 5 個關鍵點位，串聯機捷沿線、空軍基地、眷村文化園區、藝文特區與機場。
+</div>
+
+<h2>城市點位地圖</h2>
+<div class="ar-map-wrap">
+  <div class="ar-map">
+    <svg class="map-svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+      <!-- 桃園示意地圖 -->
+      <rect width="800" height="500" fill="#e8dcb5"/>
+      <!-- 海岸線 -->
+      <path d="M0,80 Q120,60 220,90 T420,80 T620,100 T800,90 L800,0 L0,0 Z" fill="#a8c4d4" opacity=".5"/>
+      <!-- 山區 -->
+      <path d="M0,500 L0,360 Q120,340 220,370 T440,400 T660,420 T800,400 L800,500 Z" fill="#a8b0a0" opacity=".4"/>
+      <!-- 道路 -->
+      <g stroke="#8a6a42" stroke-width="2" fill="none" opacity=".5">
+        <path d="M50,250 Q300,240 500,260 T780,270"/>
+        <path d="M200,80 L240,200 L280,360"/>
+        <path d="M450,90 L470,260 L490,420"/>
+        <path d="M620,100 L640,250 L660,400"/>
+      </g>
+      <!-- 機捷線 -->
+      <g stroke="#4a5d3a" stroke-width="3" stroke-dasharray="6 4" fill="none">
+        <path d="M100,150 Q200,170 320,210 T560,260 T740,290"/>
+      </g>
+      <!-- 區名 -->
+      <g font-family="Noto Sans TC" font-size="12" fill="#3a2817" opacity=".55">
+        <text x="180" y="170">大園區</text>
+        <text x="380" y="220">蘆竹區</text>
+        <text x="540" y="270">桃園區</text>
+        <text x="240" y="330">中壢區</text>
+        <text x="640" y="350">龜山區</text>
+        <text x="120" y="120">桃園機場</text>
+      </g>
+      <!-- 機場跑道 -->
+      <g transform="translate(120,90)" opacity=".7">
+        <rect x="-30" y="0" width="60" height="6" fill="#3a2817"/>
+        <rect x="-25" y="20" width="50" height="6" fill="#3a2817"/>
+      </g>
+      <!-- 標題 -->
+      <text x="40" y="40" font-family="Cinzel" font-weight="800" font-size="18" fill="#3a2817" letter-spacing="3">TAOYUAN AR · 5 STATIONS</text>
+      <text x="40" y="58" font-family="Courier Prime" font-size="11" fill="#3a2817" opacity=".7" letter-spacing="2">桃園 AR 戶外點位地圖</text>
+    </svg>
+
+    <!-- 5 個 AR 點位 -->
+    <a class="ar-pin" href="#ar01" style="left: 12%; top: 28%;">
+      <span class="label">AR-01 · A12 站</span>
+      <span class="dot"></span>
+    </a>
+    <a class="ar-pin" href="#ar02" style="left: 25%; top: 38%;">
+      <span class="label">AR-02 · 空軍基地</span>
+      <span class="dot"></span>
+    </a>
+    <a class="ar-pin" href="#ar03" style="left: 22%; top: 60%;">
+      <span class="label">AR-03 · 眷村園區</span>
+      <span class="dot"></span>
+    </a>
+    <a class="ar-pin" href="#ar04" style="left: 60%; top: 50%;">
+      <span class="label">AR-04 · 藝文特區</span>
+      <span class="dot"></span>
+    </a>
+    <a class="ar-pin" href="#ar05" style="left: 18%; top: 18%;">
+      <span class="label">AR-05 · 第二航廈</span>
+      <span class="dot"></span>
+    </a>
+  </div>
+</div>
+
+<h2>AR 5 點位 · 城市擴散</h2>
+<div class="ar-station-grid">
+  <div class="ar-station" id="ar01">
+    <span class="id-tag">AR-01</span>
+    <h4>機場捷運 A12 站</h4>
+    <p class="loc">機捷沿線 · 大園區 / 觸發距離 30m</p>
+    <p>冷戰時期航站歷史地景疊加。掃描 A12 站體即可看見 1962 年舊航站樓重建影像。</p>
+    <div class="meta" style="margin-top:12px;font-family:var(--mono);font-size:11px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag">[L1]</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">3 分鐘</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">WebAR</span>
+    </div>
+  </div>
+
+  <div class="ar-station" id="ar02">
+    <span class="id-tag">AR-02</span>
+    <h4>桃園空軍基地周邊</h4>
+    <p class="loc">大園區 · 黑貓中隊原駐地</p>
+    <p>U-2 AR 歷史飛行軌跡。手機向天空仰望，可見 1962 U-2 起飛軌跡疊加在現代天空上。</p>
+    <div class="meta" style="margin-top:12px;font-family:var(--mono);font-size:11px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag">[L1]</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">5 分鐘</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">SLAM</span>
+    </div>
+  </div>
+
+  <div class="ar-station" id="ar03">
+    <span class="id-tag">AR-03</span>
+    <h4>大園眷村文化園區</h4>
+    <p class="loc">大園區 · 眷村二代品牌駐點</p>
+    <p>《一把青》場景符碼 AR。掃描眷村牆面 → 浮現 1960s 眷村日常場景，朱青式背影、煤油燈、舊收音機。</p>
+    <div class="meta" style="margin-top:12px;font-family:var(--mono);font-size:11px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag">[L2]</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">5 分鐘</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">Marker</span>
+    </div>
+  </div>
+
+  <div class="ar-station" id="ar04">
+    <span class="id-tag">AR-04</span>
+    <h4>桃園藝文特區</h4>
+    <p class="loc">桃園區 · 集章兌換中心</p>
+    <p>集 5 章兌 VR 體驗。完成 5 個 AR 點位即可在此兌換場館 VR 沉浸體驗 + 紀念勳章 NFT。</p>
+    <div class="meta" style="margin-top:12px;font-family:var(--mono);font-size:11px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag">[L3]</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">持續</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">NFC</span>
+    </div>
+  </div>
+
+  <div class="ar-station" id="ar05">
+    <span class="id-tag">AR-05</span>
+    <h4>機場第二航廈</h4>
+    <p class="loc">大園區 · 過境旅客接觸點</p>
+    <p>過境旅客微體驗。航廈內掃描 QR Code → 2 分鐘黑貓微紀錄片，引導國際旅客了解桃園歷史 IP。</p>
+    <div class="meta" style="margin-top:12px;font-family:var(--mono);font-size:11px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag">[L3]</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">2 分鐘</span><span style="background:var(--paper-warm);padding:2px 6px;border:1px solid var(--khaki)">QR</span>
+    </div>
+  </div>
+</div>
+
+<h2>AR 教育包 · 對應 SDG 4</h2>
+<p>AR 卡片組共 4 套，適齡分級（不列校名）。每套含 6 張 AR 卡 + 線上學習單。</p>
+<div class="edu-grid">
+  <div class="edu-card">
+    <div class="edu-icon">🛩️</div>
+    <h5>國小版</h5>
+    <p>紙飛機與基本航空原理</p>
+  </div>
+  <div class="edu-card">
+    <div class="edu-icon">📡</div>
+    <h5>國中版</h5>
+    <p>冷戰史簡介與 U-2 機型</p>
+  </div>
+  <div class="edu-card">
+    <div class="edu-icon">📂</div>
+    <h5>高中版</h5>
+    <p>解密文件閱讀與情報倫理</p>
+  </div>
+  <div class="edu-card">
+    <div class="edu-icon">🌱</div>
+    <h5>成人版</h5>
+    <p>跨世代記憶與 ESG 永續</p>
+  </div>
+</div>
+
+<h2>AR 技術規格</h2>
+<table class="spec-table">
+  <tr><th>平台</th><td>iOS ARKit / Android ARCore · WebAR + Native APP</td></tr>
+  <tr><th>關鍵指標</th><td>SLAM 場景定位 · Marker + Markerless 雙軌</td></tr>
+  <tr><th>引擎</th><td>AR Foundation / Unity</td></tr>
+  <tr><th>人機互動</th><td>手勢、語音、SLAM</td></tr>
+  <tr><th>無障礙</th><td>離線資料包、中英日韓四語</td></tr>
+  <tr><th>個資</th><td>GPS 不留存（ESG-G 透明揭露）</td></tr>
+</table>
+
+<div class="callout">
+  <strong>AR 開發與點位建置預算：800 萬元（總預算 10%）</strong> · 5 城市點位 + 教育包（SDG 4）
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter3-vr.html" class="btn btn-primary">◂ VR 場景</a>
+  <a href="chapter3-ai.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">AI 對話 ▸</a>
+  <a href="games.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">紙飛機遊戲</a>
+</div>
+
+</main>
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P13 / 25 · 3.3 AR 戶外擴增體驗（城市擴散）</small>
+  </div>
+</footer>
+</div>
+<script src="../js/main.js"></script>
+</body>
+</html>

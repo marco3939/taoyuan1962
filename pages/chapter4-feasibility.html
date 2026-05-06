@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>可行性 · 預算 · ESG — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  /* 風險矩陣 */
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: 100px repeat(3, 1fr);
+    gap: 4px;
+    margin: 24px 0;
+  }
+  .rm-h, .rm-cell { padding: 14px 12px; font-size: 12px; line-height: 1.5; }
+  .rm-h {
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); letter-spacing: 2px;
+    text-align: center;
+  }
+  .rm-cell { background: var(--paper); border: 1px solid var(--khaki); min-height: 110px; }
+  .rm-l1 { background: rgba(74,93,58,.18); }
+  .rm-l2 { background: rgba(201,169,97,.22); }
+  .rm-l3 { background: rgba(232,164,184,.25); }
+  .rm-l4 { background: rgba(163,22,45,.18); }
+  .rm-cell strong { display: block; font-family: var(--serif-tc); margin-bottom: 4px; letter-spacing: 1px; }
+  .rm-row-label {
+    background: var(--military); color: var(--paper);
+    font-family: var(--mono); padding: 14px 12px;
+    text-align: center; letter-spacing: 2px; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* 甘特圖 */
+  .gantt {
+    background: var(--paper);
+    border: 1px solid var(--khaki);
+    padding: 24px;
+    margin: 24px 0;
+    overflow-x: auto;
+  }
+  .gantt-row {
+    display: grid;
+    grid-template-columns: 200px repeat(18, 40px);
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 1px;
+  }
+  .gantt-row .name { font-family: var(--serif-tc); letter-spacing: 2px; font-size: 13px; padding-right: 8px; }
+  .gantt-month {
+    background: var(--paper-warm);
+    height: 28px;
+    font-family: var(--mono); font-size: 10px;
+    text-align: center; line-height: 28px;
+    color: var(--khaki-deep);
+  }
+  .gantt-bar {
+    height: 28px; position: relative;
+    color: var(--paper);
+    font-size: 11px; font-family: var(--serif-tc);
+    display: flex; align-items: center; justify-content: center; letter-spacing: 1px;
+  }
+  .bar-1 { background: var(--peach-deep); }
+  .bar-2 { background: var(--khaki-deep); }
+  .bar-3 { background: var(--military); }
+  .bar-4 { background: var(--cyan-ink); }
+  .milestone {
+    width: 0; height: 0;
+    position: absolute; top: -6px; left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-bottom: 0;
+    border-top-color: var(--gold);
+    z-index: 5;
+  }
+
+  /* 預算圓餅 */
+  .budget-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 32px;
+    align-items: center;
+    margin: 32px 0;
+  }
+  @media (max-width: 720px) { .budget-wrap { grid-template-columns: 1fr; } }
+  .pie-svg { width: 100%; max-width: 360px; margin: 0 auto; display: block; }
+  .budget-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .budget-table td { padding: 8px 12px; border-bottom: 1px solid rgba(58,40,23,.15); }
+  .budget-table td:first-child { font-family: var(--serif-tc); letter-spacing: 1px; }
+  .budget-table td:nth-child(2) { font-family: var(--mono); text-align: right; color: var(--khaki-deep); }
+  .budget-table td:nth-child(3) { width: 40px; text-align: right; font-family: var(--mono); font-weight: 700; }
+  .legend-dot { display: inline-block; width: 12px; height: 12px; margin-right: 8px; }
+
+  /* SDGs */
+  .sdg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 24px 0; }
+  .sdg-card {
+    background: var(--paper);
+    padding: 18px;
+    text-align: center;
+    border-top: 4px solid;
+  }
+  .sdg-num {
+    font-family: var(--display);
+    font-size: 36px; font-weight: 800; line-height: 1;
+  }
+  .sdg-card h5 { font-family: var(--serif-tc); font-size: 13px; letter-spacing: 2px; margin: 8px 0; }
+  .sdg-card p { font-size: 11px; line-height: 1.5; }
+  .sdg-4 { border-color: #c5192d; } .sdg-4 .sdg-num { color: #c5192d; }
+  .sdg-8 { border-color: #a21942; } .sdg-8 .sdg-num { color: #a21942; }
+  .sdg-9 { border-color: #fd6925; } .sdg-9 .sdg-num { color: #fd6925; }
+  .sdg-11 { border-color: #fd9d24; } .sdg-11 .sdg-num { color: #fd9d24; }
+  .sdg-12 { border-color: #bf8b2e; } .sdg-12 .sdg-num { color: #bf8b2e; }
+  .sdg-17 { border-color: #19486a; } .sdg-17 .sdg-num { color: #19486a; }
+
+  /* ESG 雷達 */
+  .esg-radar { width: 360px; max-width: 100%; margin: 0 auto; display: block; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter3-vr.html">VR</a></li>
+    <li><a href="chapter4-feasibility.html">可行性</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 4 · FEASIBILITY · BUDGET · ESG</p>
+  <h1>可行性、排程與預算</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 第四章 18 個月 + 8,000 萬 + 6 SDGs · P18-22</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<h2>4.1 風險矩陣 · 15 項風險</h2>
+<div class="risk-matrix">
+  <div class="rm-h"></div>
+  <div class="rm-h">低衝擊</div>
+  <div class="rm-h">中衝擊</div>
+  <div class="rm-h">高衝擊</div>
+
+  <div class="rm-row-label">高機率</div>
+  <div class="rm-cell rm-l1"><strong>R4</strong> 設備維護成本<br/><strong>R10</strong> 無障礙合規</div>
+  <div class="rm-cell rm-l2"><strong>R5</strong> 行銷檔期衝突<br/><strong>R11</strong> 個資法合規</div>
+  <div class="rm-cell rm-l3"><strong>R6</strong> KOL 品質波動<br/><strong>R12</strong> IP 授權續約</div>
+
+  <div class="rm-row-label">低機率</div>
+  <div class="rm-cell rm-l1"><strong>R15</strong> 商標聯想<br/><span style="font-size:11px;opacity:.7">已調整為「黑貓任務小組」</span></div>
+  <div class="rm-cell rm-l2"><strong>R7</strong> AI 幻覺與誤導<br/><strong>R8</strong> 攤商招商不足<br/><strong>R9</strong> 餐飲衛生合規</div>
+  <div class="rm-cell rm-l4"><strong>R1</strong> 史料考證爭議<br/><strong>R2</strong> XR 技術整合<br/><strong>R3</strong> 18 個月時程壓力<br/><strong>R13</strong> 預算外部風險<br/><strong>R14</strong> 國際情勢突變</div>
+</div>
+
+<div class="callout">
+  <strong>緩解策略：</strong>R1 史學顧問；R2 Beta 測試 + 2M 餘裕；R3 里程碑罰則 + 預備金；R7 RAG + 人工審核 + 警示；R8 提早 6 個月招商 + 新銳育成；R12 5 年保底授權 + 備援 IP。<br/>
+  <strong>四道防線：</strong>RAG + 史學顧問 + ESG 第三方查驗 + 攤商三方選拔委員會
+</div>
+
+<h2>4.2 執行時程 · 18 個月四階段甘特圖</h2>
+<div class="gantt">
+  <div class="gantt-row">
+    <div class="name" style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--khaki-deep);">月份</div>
+    <div class="gantt-month">M1</div><div class="gantt-month">M2</div><div class="gantt-month">M3</div>
+    <div class="gantt-month">M4</div><div class="gantt-month">M5</div><div class="gantt-month">M6</div>
+    <div class="gantt-month">M7</div><div class="gantt-month">M8</div><div class="gantt-month">M9</div>
+    <div class="gantt-month">M10</div><div class="gantt-month">M11</div><div class="gantt-month">M12</div>
+    <div class="gantt-month">M13</div><div class="gantt-month">M14</div><div class="gantt-month">M15</div>
+    <div class="gantt-month">M16</div><div class="gantt-month">M17</div><div class="gantt-month">M18</div>
+  </div>
+  <div class="gantt-row">
+    <div class="name">P1 籌備</div>
+    <div class="gantt-bar bar-1" style="grid-column: span 3;">史料/IP/ESG/招商</div>
+    <div style="grid-column: span 15;"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="name">P2 製作</div>
+    <div style="grid-column: span 3;"></div>
+    <div class="gantt-bar bar-2" style="grid-column: span 8;">VR/AR/AI 開發 · 施工 · 餐飲設計</div>
+    <div style="grid-column: span 7;"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="name">P3 試營運</div>
+    <div style="grid-column: span 11;"></div>
+    <div class="gantt-bar bar-3" style="grid-column: span 3;">軟性開幕 · KOL · ESG 查驗</div>
+    <div style="grid-column: span 4;"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="name">P4 正式運營</div>
+    <div style="grid-column: span 14;"></div>
+    <div class="gantt-bar bar-4" style="grid-column: span 4;">行銷高峰 · AR 城市擴散 · ESG 年報</div>
+  </div>
+  <div class="gantt-row" style="margin-top: 12px;">
+    <div class="name" style="font-family:var(--display);font-size:11px;color:var(--gold);letter-spacing:3px;">里程碑</div>
+    <div style="grid-column: span 2;"></div>
+    <div style="position:relative;"><span class="milestone"></span></div>
+    <div style="grid-column: span 7;"></div>
+    <div style="position:relative;"><span class="milestone"></span></div>
+    <div style="grid-column: span 3;"></div>
+    <div style="position:relative;"><span class="milestone"></span></div>
+    <div style="grid-column: span 3;"></div>
+    <div style="position:relative;"><span class="milestone"></span></div>
+    <div style="grid-column: span 1;"></div>
+  </div>
+</div>
+
+<table class="spec-table">
+  <thead><tr><th>Phase</th><th>區間</th><th>工作項目</th><th>里程碑</th></tr></thead>
+  <tbody>
+    <tr><td><strong>P1</strong> 籌備</td><td>M1-M3</td><td>史料蒐集、IP 授權、ESG 框架、AI corpus 採集、攤商招商啟動</td><td>授權簽約、ESG 政策定稿、首批攤商簽約</td></tr>
+    <tr><td><strong>P2</strong> 製作</td><td>M4-M11</td><td>VR/AR/AI 開發、實體展區施工、餐飲品牌設計與裝修、SDGs 對應驗證</td><td>XR Beta、AI 內測、餐廳試營運</td></tr>
+    <tr><td><strong>P3</strong> 試營運</td><td>M12-M14</td><td>軟性開幕、KOL 試玩、無障礙測試、ESG 第三方查驗、餐飲菜單調整</td><td>正式開幕</td></tr>
+    <tr><td><strong>P4</strong> 正式運營</td><td>M15-M18</td><td>行銷高峰、AR 城市擴散、ESG 年報、AI 模型迭代、攤商輪替審核</td><td>半年成效報告 + ESG 報告</td></tr>
+  </tbody>
+</table>
+
+<h2>4.3 預算編列 · 8,000 萬 · 11 項</h2>
+<div class="budget-wrap">
+  <div>
+    <svg class="pie-svg" viewBox="-160 -160 320 320">
+      <!-- 11 項預算 -->
+      <!-- VR 18% -->
+      <path d="M0,-145 A145,145 0 0,1 79,-122 L0,0 Z" fill="#4a5d3a"/>
+      <!-- AR 10% -->
+      <path d="M79,-122 A145,145 0 0,1 137,-44 L0,0 Z" fill="#5a7d8a"/>
+      <!-- AI 11% -->
+      <path d="M137,-44 A145,145 0 0,1 137,44 L0,0 Z" fill="#c9a961"/>
+      <!-- 實體展區 15% -->
+      <path d="M137,44 A145,145 0 0,1 79,122 L0,0 Z" fill="#a8893f"/>
+      <!-- 文創 11% -->
+      <path d="M79,122 A145,145 0 0,1 -45,138 L0,0 Z" fill="#e8a4b8"/>
+      <!-- 餐飲 9% -->
+      <path d="M-45,138 A145,145 0 0,1 -127,71 L0,0 Z" fill="#c97a8e"/>
+      <!-- IP 6% -->
+      <path d="M-127,71 A145,145 0 0,1 -145,-15 L0,0 Z" fill="#a3162d"/>
+      <!-- 行銷 9% -->
+      <path d="M-145,-15 A145,145 0 0,1 -120,-82 L0,0 Z" fill="#3a4a2a"/>
+      <!-- ESG 3% -->
+      <path d="M-120,-82 A145,145 0 0,1 -100,-105 L0,0 Z" fill="#2a3f3a"/>
+      <!-- 場館營運 5% -->
+      <path d="M-100,-105 A145,145 0 0,1 -50,-136 L0,0 Z" fill="#5a4a32"/>
+      <!-- 預備金 3% -->
+      <path d="M-50,-136 A145,145 0 0,1 0,-145 L0,0 Z" fill="#3a2817"/>
+      <!-- 中心 -->
+      <circle r="58" fill="#0a1628"/>
+      <text y="-8" text-anchor="middle" fill="#c9a961" font-family="Noto Serif TC" font-weight="700" font-size="14" letter-spacing="3">總投資</text>
+      <text y="14" text-anchor="middle" fill="#f4ebd0" font-family="Cinzel" font-weight="800" font-size="20">8,000</text>
+      <text y="32" text-anchor="middle" fill="#f4ebd0" font-family="Noto Sans TC" font-size="11">萬 NTD</text>
+    </svg>
+  </div>
+  <div>
+    <table class="budget-table">
+      <tr><td><span class="legend-dot" style="background:#4a5d3a"></span>VR 內容開發</td><td>1,440 萬</td><td>18%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#5a7d8a"></span>AR 開發與點位建置</td><td>800 萬</td><td>10%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#c9a961"></span>AI 模型與 RAG 系統</td><td>880 萬</td><td>11%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#a8893f"></span>實體展區建置</td><td>1,200 萬</td><td>15%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#e8a4b8"></span>文創園區建置</td><td>880 萬</td><td>11%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#c97a8e"></span>餐飲品牌設計裝修</td><td>720 萬</td><td>9%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#a3162d"></span>IP 授權與顧問</td><td>480 萬</td><td>6%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#3a4a2a"></span>行銷推廣</td><td>720 萬</td><td>9%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#2a3f3a"></span>ESG 認證與查驗</td><td>240 萬</td><td>3%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#5a4a32"></span>場館營運（籌備）</td><td>400 萬</td><td>5%</td></tr>
+      <tr><td><span class="legend-dot" style="background:#3a2817"></span>應變預備金</td><td>240 萬</td><td>3%</td></tr>
+      <tr style="border-top:2px solid var(--ink);background:var(--paper-warm);"><td><strong>總計</strong></td><td><strong>8,000 萬</strong></td><td><strong>100%</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="callout">
+  <strong>預算配置原則：</strong>(1) 創意載體優先 — VR + AR + AI 三技術合計 39%（3,120 萬），反映創意 40% 評分權重。(2) 在地經濟次之 — 文創園區 + 餐飲合計 20%（1,600 萬）。(3) 永續設計成本內化 — ESG 認證 3% + 應變預備金 3% = 6% 對應外部變數。(4) IP 授權獨立計列 — 6% 確保《一把青》合法授權與史學顧問常駐。
+</div>
+
+<h2>4.4 ESG 永續設計</h2>
+<table class="spec-table">
+  <thead><tr><th>維度</th><th>做法</th><th>量化承諾</th></tr></thead>
+  <tbody>
+    <tr><td><strong style="color:var(--military)">E 環境</strong></td><td>VR/AR 替代展板；節能設備；屋頂太陽能；餐飲在地採購；機捷接駁脫碳</td><td>替代率 ≥ 50% / 採購率 ≥ 60% / 減碳 2 噸 CO₂e（Y5）</td></tr>
+    <tr><td><strong style="color:var(--peach-deep)">S 社會</strong></td><td>見證者口述史採集；無障礙設計；偏鄉巡迴；在地就業；多元敘事（外省/本省/原民/冷戰交集）</td><td>口述史 ≥ 30 位 / 無障礙 100% / 偏鄉 ≥ 10 站 / 就業 ≥110 人（Y5）</td></tr>
+    <tr><td><strong style="color:var(--khaki-deep)">G 治理</strong></td><td>史實考證委員會；季度預算公開；倫理審查；AI 透明揭露 + 個資保護；攤商三方選拔；第三方滿意度</td><td>委員會 4 個 / AI 揭露 100% / 滿意度 ≥ 85%</td></tr>
+  </tbody>
+</table>
+
+<h2>SDGs 對應 · 6 項</h2>
+<div class="sdg-grid">
+  <div class="sdg-card sdg-4"><div class="sdg-num">04</div><h5>Quality Education</h5><p>AR 教育包 4 級；VR 校外教學替代</p><p style="color:var(--khaki-deep);font-weight:700">≥ 10,000 學員</p></div>
+  <div class="sdg-card sdg-8"><div class="sdg-num">08</div><h5>Decent Work</h5><p>文創 + 餐飲在地就業、人才培訓</p><p style="color:var(--khaki-deep);font-weight:700">≥ 110 人 (Y5)</p></div>
+  <div class="sdg-card sdg-9"><div class="sdg-num">09</div><h5>Industry & Innovation</h5><p>XR/AI 內容產業育成</p><p style="color:var(--khaki-deep);font-weight:700">≥ 30 技術職缺</p></div>
+  <div class="sdg-card sdg-11"><div class="sdg-num">11</div><h5>Sustainable Cities</h5><p>文化資產數位保存、城市觀光升級</p><p style="color:var(--khaki-deep);font-weight:700">觀光收益成長</p></div>
+  <div class="sdg-card sdg-12"><div class="sdg-num">12</div><h5>Responsible Consumption</h5><p>數位減廢 + 在地食材 ≥60% + 環保餐具</p><p style="color:var(--khaki-deep);font-weight:700">減碳 2 噸 CO₂e</p></div>
+  <div class="sdg-card sdg-17"><div class="sdg-num">17</div><h5>Partnerships</h5><p>政府×學術×公視×社區×IP×攤商×餐飲</p><p style="color:var(--khaki-deep);font-weight:700">≥ 10 簽約夥伴</p></div>
+</div>
+
+<h2>第五章 結語 · 五大長期影響</h2>
+<table class="spec-table">
+  <thead><tr><th>維度</th><th>預期改變</th><th>Y1</th><th>Y3</th><th>Y5</th></tr></thead>
+  <tbody>
+    <tr><td>市民認同</td><td>桃園在地文化標誌 + 外省二三代記憶共識</td><td>65%</td><td>70%</td><td><strong>80%</strong></td></tr>
+    <tr><td>旅客體驗</td><td>過境 → 停留 → 深度旅遊轉換</td><td>3 hr</td><td>3.5 hr</td><td><strong>4 hr</strong></td></tr>
+    <tr><td>產業活絡</td><td>文創與餐飲在地就業、技職育成</td><td>60 人</td><td>85 人</td><td><strong>110 人</strong></td></tr>
+    <tr><td>城市形象</td><td>桃園「等待的天空之城」國際識別</td><td>80 則</td><td>300 則</td><td><strong>800 則</strong></td></tr>
+    <tr><td>永續效益</td><td>首個 ESG 認證文化園區 [L3 期許]</td><td>ESG 報告就位</td><td>TCSA 標竿</td><td><strong>ESG 認證</strong></td></tr>
+  </tbody>
+</table>
+
+<h2>結語</h2>
+<div class="callout-quote" style="font-size:18px;line-height:2;letter-spacing:3px;">
+  「等待的天空」既是桃園的城市本質，也是本案的價值核心。<br/>
+  我們以《飛過冷戰，等你回家》為承諾，以「桃花飛機」為視覺信物，<br/>
+  讓 1962 的等待與 2026 的等待，在桃園的天空下重新交會。<br/><br/>
+  <span style="color:var(--peach-light);">黑貓中隊飛過冷戰，他們的家屬在桃園基地圍牆外等待；<br/>
+  今日的旅客飛過全球，他們在桃機等待轉機、等待回家。<br/>
+  等待，不只是個體的時間，也是城市的時間。<br/>
+  本案讓桃園，成為「等待」這件事被理解、被致敬、被書寫的地方。</span>
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter3-marketing.html" class="btn btn-primary">◂ 推廣矩陣</a>
+  <a href="medal.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">桃花飛機 LOGO ▸</a>
+  <a href="games.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">互動遊戲</a>
+</div>
+
+</main>
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P18-22 / 25 · 第四章 + 第五章 結語</small>
+  </div>
+</footer>
+</div>
+<script src="../js/main.js"></script>
+</body>
+</html>

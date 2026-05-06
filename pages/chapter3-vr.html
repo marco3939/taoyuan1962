@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VR 6 場景沉浸 — 等待的天空 v5.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  /* VR 場景卡 */
+  .vr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 32px 0; }
+  .vr-card {
+    background: var(--night-deep);
+    color: var(--paper);
+    border: 1px solid rgba(201,169,97,.3);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .vr-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.5); }
+  .vr-preview {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+  }
+  .vr-preview svg { width: 100%; height: 100%; display: block; }
+  .vr-id {
+    position: absolute; top: 12px; left: 12px;
+    font-family: var(--display); font-size: 12px;
+    background: var(--khaki); color: var(--night);
+    padding: 4px 10px; letter-spacing: 3px; font-weight: 800;
+    z-index: 5;
+  }
+  .vr-time {
+    position: absolute; top: 12px; right: 12px;
+    font-family: var(--mono); font-size: 11px;
+    background: rgba(0,0,0,.5); color: var(--paper);
+    padding: 4px 10px; letter-spacing: 1px;
+    border: 1px solid rgba(201,169,97,.4);
+    z-index: 5;
+  }
+  .vr-info { padding: 20px; }
+  .vr-info h4 { font-family: var(--serif-tc); font-size: 19px; letter-spacing: 4px; margin-bottom: 8px; color: var(--khaki); }
+  .vr-info p { font-size: 13px; opacity: .85; margin-bottom: 12px; }
+  .vr-info .meta { display: flex; flex-wrap: wrap; gap: 6px; font-family: var(--mono); font-size: 10px; }
+  .vr-info .meta span { background: rgba(244,235,208,.08); border: 1px solid rgba(201,169,97,.3); padding: 2px 8px; }
+  .play-btn {
+    position: absolute; bottom: 16px; right: 16px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--khaki); color: var(--night);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    z-index: 5;
+    border: 2px solid var(--paper);
+  }
+
+  /* 情緒曲線 */
+  .emotion-curve { background: var(--night); padding: 32px; margin: 48px 0; color: var(--paper); }
+  .emotion-curve h3 { color: var(--khaki); border: none; }
+  .emotion-curve svg { width: 100%; max-width: 800px; margin: 16px auto; display: block; }
+
+  /* VR Modal */
+  .vr-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,.95);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; padding: 24px;
+  }
+  .vr-modal.open { display: flex; }
+  .vr-modal-inner {
+    max-width: 900px; width: 100%;
+    background: var(--night-deep); padding: 32px;
+    border: 1px solid var(--khaki);
+    color: var(--paper); position: relative;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .vr-modal-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--crimson); color: var(--paper);
+    border: none; font-size: 18px;
+  }
+  .vr-modal h3 { color: var(--khaki); border: none; font-size: 24px; margin-bottom: 16px; }
+
+  /* 規格區塊 */
+  .vr-spec {
+    background: var(--paper-warm);
+    padding: 32px;
+    margin: 32px 0;
+    border-left: 4px solid var(--military);
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter2-history.html">黑貓中隊</a></li>
+    <li><a href="chapter3-vr.html">VR 場景</a></li>
+    <li><a href="chapter3-ar.html">AR 點位</a></li>
+    <li><a href="chapter3-ai.html">AI 對話</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">CHAPTER 3.2 · VR IMMERSIVE MODULE</p>
+  <h1>VR 沉浸 6 場景</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 四維融合 / VR 場館內深度沉浸 · P12</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="callout">
+  6 場景對應「上升 — 高峰 — 回落 — 沉澱 — 再昇華」<strong>雙峰結構</strong>，避免單一情緒疲勞；每場景間設 30 秒過場黑屏。場館內 <strong>6DoF 4K/8K + 觸覺回饋 + RAG AI 對話</strong>。
+</div>
+
+<div class="vr-grid">
+
+  <div class="vr-card" onclick="openVR('vr1')">
+    <div class="vr-preview" style="background:linear-gradient(135deg,#3a4a2a,#2a3528);">
+      <span class="vr-id">VR-01</span>
+      <span class="vr-time">5 分鐘 · 6DoF 4K</span>
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="ceil" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1a2818"/><stop offset="1" stop-color="#3a4a2a"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="200" fill="url(#ceil)"/>
+        <!-- 簡報室桌椅 -->
+        <rect x="60" y="120" width="280" height="8" fill="#5a4a32"/>
+        <rect x="80" y="128" width="40" height="60" fill="#3a2817"/>
+        <rect x="180" y="128" width="40" height="60" fill="#3a2817"/>
+        <rect x="280" y="128" width="40" height="60" fill="#3a2817"/>
+        <!-- 投影地圖 -->
+        <rect x="100" y="30" width="200" height="80" fill="#1a3a4a" stroke="#c9a961" stroke-width="1"/>
+        <text x="200" y="70" text-anchor="middle" fill="#c9a961" font-family="Courier Prime" font-size="14" font-weight="700">CHINA · 1962</text>
+        <!-- 光束 -->
+        <path d="M150,30 L100,120 L300,120 L250,30 Z" fill="rgba(201,169,97,.15)"/>
+      </svg>
+      <button class="play-btn">▶</button>
+    </div>
+    <div class="vr-info">
+      <h4>任務簡報室</h4>
+      <p>1962 桃園基地 · 已解密任務輪廓 · 進入冷戰之天的第一步</p>
+      <div class="meta"><span>1962 桃園基地</span><span>L1 已解密</span><span>SDG 9</span></div>
+    </div>
+  </div>
+
+  <div class="vr-card" onclick="openVR('vr2')">
+    <div class="vr-preview" style="background:linear-gradient(180deg,#0a1628,#3a2a4a);">
+      <span class="vr-id">VR-02</span>
+      <span class="vr-time">8 分鐘 · 6DoF + 觸覺</span>
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="sky" cx="50%" cy="50%">
+            <stop offset="0" stop-color="#1a3a5a"/><stop offset="1" stop-color="#0a1628"/>
+          </radialGradient>
+        </defs>
+        <rect width="400" height="200" fill="url(#sky)"/>
+        <!-- 地球 -->
+        <circle cx="200" cy="280" r="120" fill="#3a5a4a" opacity=".7"/>
+        <ellipse cx="200" cy="170" rx="200" ry="14" fill="rgba(244,235,208,.2)"/>
+        <!-- 座艙儀表 -->
+        <rect x="40" y="140" width="320" height="60" fill="#0a0a0a" stroke="#c9a961" stroke-width="1"/>
+        <circle cx="100" cy="170" r="14" fill="none" stroke="#c9a961" stroke-width="1.5"/>
+        <text x="100" y="174" text-anchor="middle" fill="#c9a961" font-size="9" font-family="Courier Prime">ALT</text>
+        <circle cx="200" cy="170" r="14" fill="none" stroke="#c9a961" stroke-width="1.5"/>
+        <text x="200" y="174" text-anchor="middle" fill="#c9a961" font-size="9" font-family="Courier Prime">SPD</text>
+        <circle cx="300" cy="170" r="14" fill="none" stroke="#c9a961" stroke-width="1.5"/>
+        <text x="300" y="174" text-anchor="middle" fill="#c9a961" font-size="9" font-family="Courier Prime">FUEL</text>
+        <!-- 星星 -->
+        <circle cx="80" cy="40" r="1" fill="#fff"/><circle cx="150" cy="60" r="1" fill="#fff"/>
+        <circle cx="280" cy="30" r="1.5" fill="#fff"/><circle cx="340" cy="80" r="1" fill="#fff"/>
+      </svg>
+      <button class="play-btn">▶</button>
+    </div>
+    <div class="vr-info">
+      <h4>U-2 高空座艙</h4>
+      <p>7 萬呎高空 · 駕駛艙公開規格 · 「座艙壓力比月球表面還低」</p>
+      <div class="meta"><span>70,000 呎</span><span>L1 公開規格</span><span>觸覺回饋</span></div>
+    </div>
+  </div>
+
+  <div class="vr-card" onclick="openVR('vr3')">
+    <div class="vr-preview" style="background:linear-gradient(135deg,#5a4a32,#3a2817);">
+      <span class="vr-id">VR-03</span>
+      <span class="vr-time">6 分鐘 · 6DoF + RAG AI</span>
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <rect width="400" height="200" fill="#3a2817"/>
+        <!-- 牆面 -->
+        <rect x="0" y="0" width="400" height="120" fill="#5a4a32"/>
+        <!-- 窗 -->
+        <rect x="40" y="20" width="100" height="80" fill="#a8c4d4" stroke="#3a2817" stroke-width="2"/>
+        <line x1="90" y1="20" x2="90" y2="100" stroke="#3a2817" stroke-width="2"/>
+        <line x1="40" y1="60" x2="140" y2="60" stroke="#3a2817" stroke-width="2"/>
+        <!-- 老收音機 -->
+        <rect x="220" y="40" width="80" height="50" rx="6" fill="#8a6a42" stroke="#3a2817"/>
+        <circle cx="240" cy="65" r="8" fill="#1a1a1a"/>
+        <circle cx="280" cy="65" r="3" fill="#c9a961"/>
+        <!-- 桌子 + 茶 -->
+        <rect x="60" y="120" width="280" height="6" fill="#3a2817"/>
+        <ellipse cx="200" cy="138" rx="22" ry="6" fill="#fff" opacity=".8"/>
+        <rect x="180" y="128" width="40" height="14" fill="#fff"/>
+        <!-- 老照片 -->
+        <rect x="280" y="20" width="60" height="80" fill="#f4ebd0" stroke="#3a2817"/>
+        <rect x="288" y="32" width="44" height="50" fill="#a8a8a8"/>
+      </svg>
+      <button class="play-btn">▶</button>
+    </div>
+    <div class="vr-info">
+      <h4>眷村客廳</h4>
+      <p>1962 同期眷舍 · 借鑑《一把青》場景 · 藤椅、舊收音機、煤油燈</p>
+      <div class="meta"><span>L2 文本脈絡</span><span>RAG AI 對話</span><span>SDG 11</span></div>
+    </div>
+  </div>
+
+  <div class="vr-card" onclick="openVR('vr4')">
+    <div class="vr-preview" style="background:linear-gradient(180deg,#c97a8e,#5a3a4a);">
+      <span class="vr-id">VR-04</span>
+      <span class="vr-time">5 分鐘 · 6DoF 場景化</span>
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e8a4b8"/>
+            <stop offset=".6" stop-color="#c97a8e"/>
+            <stop offset="1" stop-color="#5a3a4a"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="200" fill="url(#dusk)"/>
+        <!-- 圍牆 -->
+        <rect x="0" y="140" width="400" height="60" fill="#3a2817"/>
+        <rect x="0" y="135" width="400" height="6" fill="#5a4a32"/>
+        <!-- 鐵絲網 -->
+        <g stroke="#1a1a1a" stroke-width="1" opacity=".6">
+          <line x1="0" y1="142" x2="400" y2="142"/>
+          <line x1="0" y1="148" x2="400" y2="148"/>
+        </g>
+        <!-- 妻女剪影 -->
+        <g fill="#1a1a1a">
+          <ellipse cx="80" cy="170" rx="14" ry="22"/>
+          <circle cx="80" cy="142" r="10"/>
+          <ellipse cx="105" cy="180" rx="6" ry="14"/>
+          <circle cx="105" cy="160" r="6"/>
+        </g>
+        <!-- 遠方戰機 -->
+        <path d="M340,60 L348,57 L352,60 L348,63 Z M345,60 L345,55 M345,60 L345,65" stroke="#1a1a1a" stroke-width="1.5" fill="#1a1a1a"/>
+        <!-- 太陽 -->
+        <circle cx="200" cy="100" r="32" fill="#f4c7c3" opacity=".7"/>
+      </svg>
+      <button class="play-btn">▶</button>
+    </div>
+    <div class="vr-info">
+      <h4>機場圍牆外</h4>
+      <p>任務歸返黃昏 · 文學意象 · 「妻女在桃園基地圍牆外等待親人歸返」</p>
+      <div class="meta"><span>L2/L3 自繪</span><span>情感餘韻</span><span>SDG 11</span></div>
+    </div>
+  </div>
+
+  <div class="vr-card" onclick="openVR('vr5')">
+    <div class="vr-preview" style="background:linear-gradient(135deg,#1a1a1a,#2a2a2a);">
+      <span class="vr-id">VR-05</span>
+      <span class="vr-time">6 分鐘 · AI 文件互動</span>
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <rect width="400" height="200" fill="#2a2a2a"/>
+        <!-- 文件堆 -->
+        <g transform="translate(60,40)">
+          <rect width="120" height="140" fill="#f4ebd0" transform="rotate(-3)"/>
+          <rect width="120" height="140" fill="#e8dcb5" transform="rotate(2) translate(8,4)"/>
+          <text x="60" y="40" text-anchor="middle" font-family="Courier Prime" font-size="11" fill="#3a2817" transform="rotate(2) translate(8,4)">CIA · TOP SECRET</text>
+        </g>
+        <!-- 章戳 -->
+        <g transform="translate(220,80)">
+          <circle r="40" fill="none" stroke="#a3162d" stroke-width="3" opacity=".7"/>
+          <text y="-4" text-anchor="middle" font-family="Cinzel" font-weight="800" font-size="13" fill="#a3162d" opacity=".75">DECLASSIFIED</text>
+          <text y="14" text-anchor="middle" font-family="Courier Prime" font-size="9" fill="#a3162d" opacity=".7">2010s</text>
+        </g>
+        <!-- AI 介面 -->
+        <rect x="280" y="40" width="100" height="120" fill="#0a1628" stroke="#c9a961"/>
+        <text x="330" y="60" text-anchor="middle" fill="#c9a961" font-family="Courier Prime" font-size="9">> QUERY</text>
+        <line x1="290" y1="80" x2="370" y2="80" stroke="#c9a961" stroke-width=".5"/>
+        <line x1="290" y1="95" x2="350" y2="95" stroke="#c9a961" stroke-width=".5" opacity=".5"/>
+        <line x1="290" y1="110" x2="370" y2="110" stroke="#c9a961" stroke-width=".5" opacity=".5"/>
+      </svg>
+      <button class="play-btn">▶</button>
+    </div>
+    <div class="vr-info">
+      <h4>解密檔案室</h4>
+      <p>2020s 解密情境 · 公開解密文件 · AI RAG 互動查詢</p>
+      <div class="meta"><span>L1 / L4</span><span>RAG 文件</span><span>SDG 9</span></div>
+    </div>
+  </div>
+
+  <div class="vr-card" onclick="openVR('vr6')">
+    <div class="vr-preview" style="background:linear-gradient(135deg,#4a5d3a,#3a4a2a);">
+      <span class="vr-id">VR-06</span>
+      <span class="vr-time">8 分鐘 · AI RAG 對話</span>
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        <rect width="400" height="200" fill="#2a3528"/>
+        <!-- 老兵 -->
+        <g transform="translate(200,100)">
+          <ellipse cx="0" cy="40" rx="44" ry="50" fill="#5a4a3a"/>
+          <circle cx="0" cy="-10" r="32" fill="#d4b094"/>
+          <!-- 軍帽 -->
+          <ellipse cx="0" cy="-30" rx="36" ry="8" fill="#3a4a2a"/>
+          <rect x="-32" y="-38" width="64" height="14" rx="2" fill="#3a4a2a"/>
+          <circle cx="0" cy="-32" r="6" fill="#c9a961"/>
+          <!-- 眼睛 -->
+          <ellipse cx="-10" cy="-10" rx="2" ry="3" fill="#1a1a1a"/>
+          <ellipse cx="10" cy="-10" rx="2" ry="3" fill="#1a1a1a"/>
+          <!-- 嘴 -->
+          <path d="M-8,8 Q0,12 8,8" stroke="#3a2817" stroke-width="1.5" fill="none"/>
+        </g>
+        <!-- 對話氣泡 -->
+        <g transform="translate(60,40)">
+          <rect width="120" height="50" rx="4" fill="#f4ebd0"/>
+          <text x="60" y="22" text-anchor="middle" font-family="Noto Serif TC" font-size="11" fill="#3a2817">「飛 7 萬呎以上...」</text>
+          <text x="60" y="40" text-anchor="middle" font-family="Courier Prime" font-size="9" fill="#a3162d">— 口述史 #017</text>
+        </g>
+      </svg>
+      <button class="play-btn">▶</button>
+    </div>
+    <div class="vr-info">
+      <h4>口述歷史對話</h4>
+      <p>見證者第一人稱 · 見證者授權 · AI RAG 對話互動</p>
+      <div class="meta"><span>L1 授權</span><span>RAG 錨定</span><span>SDG 4</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="emotion-curve">
+  <h3>情緒曲線 · 雙峰結構</h3>
+  <svg viewBox="0 0 800 200">
+    <defs>
+      <linearGradient id="curve" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#4a5d3a"/>
+        <stop offset=".25" stop-color="#a3162d"/>
+        <stop offset=".5" stop-color="#c97a8e"/>
+        <stop offset=".75" stop-color="#3a4a5a"/>
+        <stop offset="1" stop-color="#c9a961"/>
+      </linearGradient>
+    </defs>
+    <line x1="50" y1="170" x2="780" y2="170" stroke="#c9a961" stroke-width="0.5"/>
+    <path d="M50,140 Q160,80 200,80 T350,150 T500,100 T650,160 T780,40"
+          stroke="url(#curve)" stroke-width="3" fill="none"/>
+    <g font-family="Courier Prime" font-size="11" fill="#f4ebd0">
+      <g><circle cx="80" cy="135" r="6" fill="#4a5d3a"/><text x="80" y="190" text-anchor="middle">VR-01</text><text x="80" y="125" text-anchor="middle" fill="#c9a961" font-size="9">預備</text></g>
+      <g><circle cx="200" cy="80" r="8" fill="#a3162d"/><text x="200" y="190" text-anchor="middle">VR-02 ★</text><text x="200" y="68" text-anchor="middle" fill="#c9a961" font-size="9">高峰·孤獨</text></g>
+      <g><circle cx="340" cy="145" r="6" fill="#c97a8e"/><text x="340" y="190" text-anchor="middle">VR-03</text><text x="340" y="135" text-anchor="middle" fill="#c9a961" font-size="9">轉折</text></g>
+      <g><circle cx="490" cy="105" r="6" fill="#c97a8e"/><text x="490" y="190" text-anchor="middle">VR-04</text><text x="490" y="93" text-anchor="middle" fill="#c9a961" font-size="9">餘韻</text></g>
+      <g><circle cx="640" cy="155" r="6" fill="#3a4a5a"/><text x="640" y="190" text-anchor="middle">VR-05</text><text x="640" y="145" text-anchor="middle" fill="#c9a961" font-size="9">結構</text></g>
+      <g><circle cx="770" cy="48" r="8" fill="#c9a961"/><text x="770" y="190" text-anchor="middle">VR-06 ★</text><text x="770" y="36" text-anchor="middle" fill="#c9a961" font-size="9">再昇華</text></g>
+    </g>
+  </svg>
+  <p style="text-align:center;margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:2px;opacity:.7;">上升 — 高峰 — 回落 — 沉澱 — 再昇華 · 雙峰結構避免單一情緒疲勞</p>
+</div>
+
+<h2>VR 技術規格</h2>
+<div class="vr-spec">
+  <table class="spec-table" style="background:transparent;box-shadow:none;">
+    <tr><th>VR 頭顯</th><td>8K 雙眼解析度、6DoF、120Hz · 消費級採購、容錯熱替換</td></tr>
+    <tr><th>渲染引擎</th><td>Unreal 5.x / Unity HDRP · 依複雜度雙軌</td></tr>
+    <tr><th>多人同步</th><td>8 人同時上線、低延遲區網 · 情境劇場與 VR 同步觸發</td></tr>
+    <tr><th>音場</th><td>HRTF 立體聲、空間音效 · 重現高空風切聲、無線電雜訊</td></tr>
+    <tr><th>無障礙 (ESG-S)</th><td>中英日韓四語、字幕、座椅版、VR 替代版 · 符合通用設計</td></tr>
+  </table>
+</div>
+
+<div class="callout">
+  <strong>VR 內容開發預算：1,440 萬元（總預算 18%）</strong> · 反映創意 40% 評分權重，6 場景 6DoF 沉浸 + 觸覺回饋
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter2-venue.html" class="btn btn-primary">◂ 場館對照</a>
+  <a href="chapter3-ar.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">AR 5 城市點位 ▸</a>
+  <a href="chapter3-ai.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">AI 對話模組</a>
+</div>
+
+</main>
+
+<div class="vr-modal" id="vrModal">
+  <div class="vr-modal-inner">
+    <button class="vr-modal-close" onclick="closeVR()">✕</button>
+    <h3 id="modalTitle">VR 場景</h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v5.6</small>
+    <small>P12 / 25 · 3.2 VR 沉浸模組（場館內）</small>
+  </div>
+</footer>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+const vrData = {
+  vr1: {
+    title: 'VR-01 · 任務簡報室',
+    body: `<p><strong>時空：</strong>1962 桃園基地</p>
+           <p><strong>依據：</strong>已解密任務輪廓 [L1]</p>
+           <p><strong>體驗：</strong>觀眾進入 1962 黑貓中隊任務簡報室。投影機顯示中國大陸地圖。情報官說明今日任務目標。長條鋁桌、軍綠制服、解密任務地圖牆。</p>
+           <p><strong>互動：</strong>用手指點選地圖上目標 → 顯示任務簡介卡。情緒：嚴肅、專注、預備。</p>
+           <p><strong>過場：</strong>30 秒黑屏 → 進入 U-2 駕駛艙</p>`
+  },
+  vr2: {
+    title: 'VR-02 · U-2 高空座艙',
+    body: `<p><strong>時空：</strong>7 萬呎高空</p>
+           <p><strong>依據：</strong>駕駛艙公開規格 [L1]</p>
+           <p><strong>體驗：</strong>觀眾穿上太空衣壓力服（觸覺回饋），進入 U-2 駕駛艙。儀表板亮起 — ALT 70,000ft、SPD 400kts、FUEL 80%。窗外是稀薄黑藍天空，地平線弧度清晰可見。</p>
+           <blockquote style="font-family:var(--serif-tc);font-size:18px;letter-spacing:3px;color:var(--peach-light);border-left:3px solid var(--khaki);padding:12px 16px;margin:16px 0;">
+             「飛 7 萬呎以上，座艙壓力比月球表面還低。<br/>你問我怕？恐懼變成程序。」
+           </blockquote>
+           <p><strong>互動：</strong>觸覺回饋模擬風切震動、無線電雜訊耳機聲。情緒：高峰、孤獨、任務感。</p>`
+  },
+  vr3: {
+    title: 'VR-03 · 眷村客廳',
+    body: `<p><strong>時空：</strong>1962 同期眷舍 [L2]</p>
+           <p><strong>依據：</strong>借鑑《一把青》場景</p>
+           <p><strong>體驗：</strong>仿《一把青》朱青家客廳氛圍。藤椅、舊收音機（播 1960s 老歌）、老照片牆、煤油燈、搪瓷碗印「軍眷專用」。</p>
+           <p><strong>RAG AI 對話：</strong>觀眾可與 AI 「師娘」對話，問她「他飛得安全嗎？」AI 回答錨定見證者口述史 corpus。</p>
+           <p><strong>邊界：</strong>不將虛構角色與真實隊員對應，亦不虛構未出現之劇情與台詞。</p>`
+  },
+  vr4: {
+    title: 'VR-04 · 機場圍牆外',
+    body: `<p><strong>時空：</strong>任務歸返黃昏 [L2][L3]</p>
+           <p><strong>體驗：</strong>觀眾化身為等待親人歸返的妻女，站在桃園基地圍牆外。夕陽染粉天空，遠方戰機輪廓由小變大。鐵絲網影斜映在地。</p>
+           <blockquote style="font-family:var(--serif-tc);font-size:16px;color:var(--peach-light);padding:12px;border-left:3px solid var(--peach);margin:16px 0;">
+             「等待，是桃園的城市本質；<br/>天空，是桃園的城市背景。」
+           </blockquote>
+           <p><strong>情緒：</strong>餘韻、等待、牽掛。對應《一把青》「等待與失去高峰」敘事。</p>`
+  },
+  vr5: {
+    title: 'VR-05 · 解密檔案室',
+    body: `<p><strong>時空：</strong>2020s 解密情境</p>
+           <p><strong>依據：</strong>公開解密 [L1] / [L4 待補檔案編號]</p>
+           <p><strong>體驗：</strong>進入國家檔案管理局數位檔案室。書架延伸至無盡。觀眾可拿取 1961-1974 黑貓中隊任務檔案，每份蓋著紅色 DECLASSIFIED 章。</p>
+           <p><strong>AI 文件互動：</strong>把文件遞給 AI，AI 朗讀並摘要關鍵情報。RAG 錨定原始文件編號。</p>
+           <p><strong>禁止項：</strong>AI 不得自由生成擊落數字等敏感數據。</p>`
+  },
+  vr6: {
+    title: 'VR-06 · 口述歷史對話',
+    body: `<p><strong>時空：</strong>見證者第一人稱</p>
+           <p><strong>依據：</strong>見證者授權 [L1]</p>
+           <p><strong>體驗：</strong>面對面與虛擬黑貓老兵「李上校」（虛構稱謂）對話。老兵坐在自家客廳，背景有老照片牆。</p>
+           <div style="background:rgba(244,235,208,.08);padding:12px;font-family:var(--mono);font-size:13px;margin:16px 0;">
+             <p style="color:var(--peach-light);">使用者：「你怕嗎？」</p>
+             <p style="color:var(--khaki);margin-top:8px;">李上校：「飛 7 萬呎以上，座艙壓力比月球表面還低。你問我怕？恐懼變成程序。」</p>
+             <p style="opacity:.7;margin-top:8px;font-size:11px;">— 來源錨定：見證者口述史 #017，1965 任務後採訪片段 [L1]</p>
+           </div>
+           <p><strong>透明度：</strong>每段 AI 回覆附「原始史料連結」與「來源錨定編號」。介面警示「AI 生成，僅供參考」。</p>`
+  }
+};
+function openVR(id) {
+  const d = vrData[id];
+  document.getElementById('modalTitle').textContent = d.title;
+  document.getElementById('modalBody').innerHTML = d.body;
+  document.getElementById('vrModal').classList.add('open');
+}
+function closeVR() {
+  document.getElementById('vrModal').classList.remove('open');
+}
+document.getElementById('vrModal').addEventListener('click', e => {
+  if (e.target.id === 'vrModal') closeVR();
+});
+</script>
+</body>
+</html>
