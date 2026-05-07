@@ -1,4 +1,4 @@
-/* 等待的天空 v5.6 — 主腳本 */
+/* 等待的天空 v6.0 — 主腳本 */
 
 // === KPI 數字計數動畫 ===
 function animateCounters() {

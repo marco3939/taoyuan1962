@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>參考資料 + 4 部備援 IP — 等待的天空 v6.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  .ref-section {
+    background: var(--paper-warm);
+    padding: 24px 28px;
+    border-left: 4px solid var(--khaki);
+    margin: 24px 0;
+  }
+  .ref-section h3 {
+    font-family: var(--serif-tc);
+    font-size: 18px;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .ref-section ol { padding-left: 24px; line-height: 2.1; }
+  .ref-section li { font-size: 13.5px; }
+  .ref-section li small {
+    display: inline-block;
+    background: var(--paper);
+    padding: 1px 6px;
+    margin-left: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--khaki-deep);
+    letter-spacing: 1px;
+    border: 1px solid var(--khaki);
+  }
+  .backup-ip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .backup-ip-card {
+    background: var(--paper);
+    border: 2px solid var(--crimson);
+    padding: 24px;
+    position: relative;
+  }
+  .backup-ip-card::before {
+    content: 'Plan B';
+    position: absolute; top: -12px; right: 16px;
+    background: var(--crimson); color: var(--paper);
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+  .backup-ip-card h4 {
+    font-family: var(--serif-tc);
+    font-size: 19px;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  .backup-ip-card .author {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--khaki-deep);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .backup-ip-card .topic {
+    display: inline-block;
+    background: var(--paper-warm);
+    color: var(--ink);
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: var(--serif-tc);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .backup-ip-card p { font-size: 13px; line-height: 1.7; }
+  .l4-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .l4-item {
+    background: var(--paper);
+    border: 1px dashed var(--khaki);
+    padding: 14px;
+    font-size: 12px;
+  }
+  .l4-item strong {
+    color: var(--crimson);
+    font-family: var(--mono);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter4-feasibility.html">可行性</a></li>
+    <li><a href="references.html">參考資料</a></li>
+    <li><a href="medal.html">勳章</a></li>
+    <li><a href="games.html">遊戲</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero">
+  <p class="subtitle">P25 · REFERENCES + BACKUP IP</p>
+  <h1>參考資料 + 備援 IP 清單</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 第 25 頁參考資料（含 4 部備援文本 Plan B）</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="callout">
+  本頁完整列出 6 大類參考資料，包含<strong>史料 / 文學 / 口述 / 技術 / 備援 IP / 待補類別</strong>。所有與黑貓中隊、《一把青》、桃園航空史相關陳述均標 <span class="tag">[L1]</span><span class="tag">[L2]</span><span class="tag">[L3]</span><span class="tag">[L4]</span>，Phase 1 完成 L4 補齊與顧問群審稿。
+</div>
+
+<div class="ref-section">
+  <h3>一、史料 / 官方文獻</h3>
+  <ol>
+    <li>國防部公開出版品中關於空軍第 35 中隊之記載 <small>L1</small></li>
+    <li>CIA 解密文件中 U-2 對華偵察任務公開部分 <small>L1</small></li>
+    <li>國家檔案管理局 1961–1974 空軍黑貓中隊公開檔案 <small>L1</small></li>
+    <li>桃園市文化局《桃園眷村文化保存計畫》成果報告 <small>L1</small> <small>L4</small></li>
+    <li>文化部「再造歷史現場」白皮書、文創園區計畫補助辦法 <small>L1</small></li>
+    <li>金管會永續報告書編製與申報作業辦法 <small>L1</small></li>
+  </ol>
+</div>
+
+<div class="ref-section">
+  <h3>二、文學 / 影視作品</h3>
+  <ol start="7">
+    <li>白先勇〈一把青〉，《台北人》，爾雅出版社，1971 <small>L2</small></li>
+    <li>公視《一把青》電視劇，曹瑞原導演，2015，共 31 集 <small>L2</small></li>
+    <li>白先勇相關文學評論與訪談文集（歷年） <small>L2</small></li>
+  </ol>
+</div>
+
+<div class="ref-section">
+  <h3>三、見證者口述 / 紀錄片</h3>
+  <ol start="10">
+    <li>黑貓中隊退役者口述歷史（歷年國家影視聽資料庫與民間紀錄片） <small>L1</small> <small>L4</small></li>
+    <li>公開出版之黑貓中隊回憶錄與傳記類書籍（歷年） <small>L1</small></li>
+  </ol>
+</div>
+
+<div class="ref-section">
+  <h3>四、技術 / 產業 / ESG 參考</h3>
+  <ol start="12">
+    <li>國際 VR 案例：Anne Frank House VR / Nat Geo Explore VR / Imperial War Museum VR <small>L3</small></li>
+    <li>桃園機場年度運量統計（2020–2024）、桃園航空城整體開發計畫 <small>L1</small> <small>L4</small></li>
+    <li>AI 倫理：歐盟 AI Act、OECD AI Principles <small>L1</small></li>
+    <li>ESG 框架：GRI、TCFD、SASB、UN SDGs；CSRone、TCSA 案例 <small>L1</small></li>
+  </ol>
+</div>
+
+<h2 style="margin-top:48px;">五、備援 IP 清單（主 IP 失敗 Plan B · v6 NEW）</h2>
+<div class="callout callout-warn">
+  若主 IP《一把青》授權未洽妥，<strong>Phase 0 同步啟動下列 4 部備援文本</strong>中至少 2 部之 Plan B，確保「眷村之心」敘事支柱不因單點故障而瓦解。預算內 IP 授權 600 萬已含備援洽商成本。對應風險矩陣 R-IP 紅區緩解。
+</div>
+
+<div class="backup-ip-grid">
+  <div class="backup-ip-card">
+    <h4>《巨流河》</h4>
+    <p class="author">齊邦媛 · 天下文化 · 2009</p>
+    <span class="topic">眷村之心</span>
+    <p>空軍家屬戰時記憶。橫跨 1924–2009 自傳體巨著，承載外省第一代來台空軍眷屬集體經驗。</p>
+  </div>
+  <div class="backup-ip-card">
+    <h4>《沖天》紀錄片</h4>
+    <p class="author">張釗維 · CNEX · 2015</p>
+    <span class="topic">冷戰之天</span>
+    <p>空軍英雄群像。對日抗戰中華民國空軍飛行員紀錄片，畫面語彙與 U-2 時代精神高度契合。</p>
+  </div>
+  <div class="backup-ip-card">
+    <h4>《大江大海一九四九》</h4>
+    <p class="author">龍應台 · 天下文化</p>
+    <span class="topic">記憶之航</span>
+    <p>時代群像。1949 大遷徙文學重構，與「等待的天空」城市主軸（國門意象）強烈共振。</p>
+  </div>
+  <div class="backup-ip-card">
+    <h4>《灣生回家》</h4>
+    <p class="author">黃銘正 · 甲上娛樂 · 2015</p>
+    <span class="topic">記憶之航</span>
+    <p>離散與回家。日治時期出生的日籍灣生「回家」紀錄片，與 SLOGAN「等你回家」直接呼應。</p>
+  </div>
+</div>
+
+<h2 style="margin-top:48px;">六、待補類別（L4 — Phase 1 完成補齊）</h2>
+<div class="l4-grid">
+  <div class="l4-item"><strong>L4-1</strong> 黑貓殉職飛行員精確人數與名單</div>
+  <div class="l4-item"><strong>L4-2</strong> 解密文件檔案編號</div>
+  <div class="l4-item"><strong>L4-3</strong> 桃園眷村保存具體年度</div>
+  <div class="l4-item"><strong>L4-4</strong> 紀錄片精確片名</div>
+  <div class="l4-item"><strong>L4-5</strong> 航空城開發具體節點</div>
+  <div class="l4-item"><strong>L4-6</strong> 合作單位具體名稱（避免列校名）</div>
+  <div class="l4-item"><strong>L4-7</strong> 文創園區補助具體額度</div>
+  <div class="l4-item"><strong>L4-8</strong>《一把青》IP 授權確切金額</div>
+</div>
+
+<div class="callout">
+  <strong>引用準則：</strong>所有與黑貓中隊、《一把青》、桃園航空史相關陳述均標 [L1]/[L2]/[L3]/[L4]，Phase 1 完成 L4 補齊與顧問群審稿。<br/>
+  <strong>AI 倫理聲明：</strong>AI 互動採 RAG 錨定真實 corpus + 三層 Guardrails，禁止自由生成歷史人物言論。<br/>
+  <strong>圖片來源：</strong>本機影像素材（團隊拍攝、桃園航空城場域實景），正式送件補齊授權 [L4]。
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter4-feasibility.html" class="btn btn-primary">◂ 第四章 可行性</a>
+  <a href="../index.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">回首頁</a>
+  <a href="medal.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">桃花飛機 LOGO</a>
+</div>
+
+</main>
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v6.0</small>
+    <small>P25 / 25 · 參考資料 + 4 部備援 IP（Plan B）</small>
+  </div>
+</footer>
+</div>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>機場過境 60 分鐘專屬模組 — 等待的天空 v6.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<link rel="stylesheet" href="../css/animations.css" />
+<style>
+  .transit-hero {
+    background: linear-gradient(135deg, #0a1628 0%, #1a2538 40%, #2a3540 100%);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .transit-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(2px 2px at 15% 25%, rgba(244,235,208,.5), transparent),
+      radial-gradient(2px 2px at 75% 65%, rgba(201,169,97,.6), transparent),
+      radial-gradient(1px 1px at 50% 40%, rgba(244,235,208,.4), transparent);
+    background-size: 400px 400px;
+    animation: starsDrift 50s linear infinite;
+  }
+
+  /* 60 分鐘時間軸 */
+  .timeline-60 {
+    background: var(--paper);
+    border: 1px solid var(--khaki);
+    padding: 32px;
+    margin: 32px 0;
+    overflow-x: auto;
+  }
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(60, 1fr);
+    gap: 1px;
+    margin-bottom: 16px;
+    height: 80px;
+    position: relative;
+  }
+  .timeline-segment {
+    background: var(--paper-warm);
+    position: relative;
+    overflow: hidden;
+  }
+  .timeline-stage {
+    position: absolute;
+    top: 0; bottom: 0;
+    color: var(--paper);
+    padding: 8px 12px;
+    font-family: var(--serif-tc);
+    font-size: 12px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(244,235,208,.3);
+  }
+  .stage-1 { background: var(--khaki-deep); left: 0; width: 8.33%; }
+  .stage-2 { background: var(--military); left: 8.33%; width: 33.33%; }
+  .stage-3 { background: var(--gold); left: 41.67%; width: 16.67%; color: var(--ink); }
+  .stage-4 { background: var(--peach-deep); left: 58.33%; width: 33.33%; }
+  .stage-5 { background: var(--crimson); left: 91.67%; width: 8.33%; }
+  .timeline-axis {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--khaki-deep);
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* 階段卡片 */
+  .stage-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .stage-card {
+    background: var(--paper);
+    border: 1px solid var(--khaki);
+    border-top: 4px solid;
+    padding: 24px;
+    position: relative;
+  }
+  .stage-card.s1 { border-top-color: var(--khaki-deep); }
+  .stage-card.s2 { border-top-color: var(--military); }
+  .stage-card.s3 { border-top-color: var(--gold); }
+  .stage-card.s4 { border-top-color: var(--peach-deep); }
+  .stage-card.s5 { border-top-color: var(--crimson); }
+  .stage-card .stage-num {
+    position: absolute; top: -16px; left: 16px;
+    background: var(--ink); color: var(--paper);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-family: var(--display); font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .stage-card .time-tag {
+    display: inline-block;
+    background: var(--paper-warm);
+    color: var(--khaki-deep);
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .stage-card h4 { font-family: var(--serif-tc); font-size: 17px; letter-spacing: 3px; margin-bottom: 8px; }
+  .stage-card .loc { font-family: var(--mono); font-size: 11px; color: var(--khaki-deep); margin-bottom: 12px; letter-spacing: 1px; }
+  .stage-card p { font-size: 13px; line-height: 1.7; }
+
+  /* MOU 條件 */
+  .mou-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .mou-item {
+    background: var(--paper-warm);
+    border-left: 4px solid var(--gold);
+    padding: 18px;
+  }
+  .mou-item h5 { font-family: var(--serif-tc); font-size: 15px; letter-spacing: 2px; margin-bottom: 6px; }
+  .mou-item p { font-size: 13px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="nav-inner">
+  <a href="../index.html" class="brand"><span class="brand-medal">★</span><span class="brand-text"><span class="brand-cn">等待的天空</span><span class="brand-en">Waiting Sky · Taoyuan</span></span></a>
+  <button class="nav-toggle" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <ul class="nav-list">
+    <li><a href="executive-summary.html">執行摘要</a></li>
+    <li><a href="chapter3-vr.html">投影主廳</a></li>
+    <li><a href="chapter3-ar.html">AR 點位</a></li>
+    <li><a href="chapter3-airport-60min.html">過境 60 分</a></li>
+    <li><a href="chapter3-ai.html">AI 對話</a></li>
+    <li><a href="medal.html">勳章</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-shell">
+<header class="page-hero transit-hero">
+  <p class="subtitle">CHAPTER 3.3-A · TRANSIT 60-MIN MODULE</p>
+  <h1>機場過境 60 分鐘專屬模組</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 四維融合 / 解客群行為盲點（v6 NEW）· P13</p>
+</header>
+
+<main class="content-wrap">
+<a href="../index.html" class="back-home">回首頁</a>
+
+<div class="callout callout-warn">
+  <strong>v6 新增模組 · 解客群行為盲點：</strong>過境旅客剛性限制 — 行李直掛、出境/再入境、銜接航班壓力。本模組設計為「<strong>不離開機場航廈生活圈</strong>」之 60 分鐘濃縮體驗，與桃機公司、機捷簽訂 MOU 合作。
+</div>
+
+<h2>60 分鐘濃縮體驗 · 五階段時間軸</h2>
+<div class="timeline-60">
+  <div class="timeline-track">
+    <div class="timeline-stage stage-1">登記</div>
+    <div class="timeline-stage stage-2">微體驗 ①</div>
+    <div class="timeline-stage stage-3">接駁</div>
+    <div class="timeline-stage stage-4">微體驗 ②</div>
+    <div class="timeline-stage stage-5">回程</div>
+  </div>
+  <div class="timeline-axis">
+    <span>0 分</span><span>10 分</span><span>20 分</span><span>30 分</span><span>40 分</span><span>50 分</span><span>60 分</span>
+  </div>
+</div>
+
+<div class="stage-cards">
+  <div class="stage-card s1">
+    <span class="stage-num">1</span>
+    <span class="time-tag">0–5 分</span>
+    <h4>登記</h4>
+    <p class="loc">桃機 T1 / T2 入境後 / 過境櫃台</p>
+    <p>AR APP 下載 + 行李直掛確認 + 過境簽證/旅客識別</p>
+  </div>
+  <div class="stage-card s2">
+    <span class="stage-num">2</span>
+    <span class="time-tag">5–25 分</span>
+    <h4>微體驗 ①</h4>
+    <p class="loc">機場航廈微展區（免出境）</p>
+    <p>AR 黑貓中隊歷史 + U-2 互動。對應 AR-05 點位。20 分鐘濃縮敘事。</p>
+  </div>
+  <div class="stage-card s3">
+    <span class="stage-num">3</span>
+    <span class="time-tag">25–35 分</span>
+    <h4>快速接駁</h4>
+    <p class="loc">機捷 A12 直達（免費接駁專車）</p>
+    <p>車上 AR 導覽影片。10 分鐘高效轉運。</p>
+  </div>
+  <div class="stage-card s4">
+    <span class="stage-num">4</span>
+    <span class="time-tag">35–55 分</span>
+    <h4>微體驗 ②</h4>
+    <p class="loc">航空城博物館速覽動線</p>
+    <p>投影主廳 22 分鐘縮短版（精華片段）。20 分鐘核心沉浸。</p>
+  </div>
+  <div class="stage-card s5">
+    <span class="stage-num">5</span>
+    <span class="time-tag">55–60 分</span>
+    <h4>回程</h4>
+    <p class="loc">機捷 A12 直達 T1/T2</p>
+    <p>電子集章 + 紀念品 QR。完成「桃花飛機」勳章 NFC 收藏。</p>
+  </div>
+</div>
+
+<h2>合作前提（MOU 條件）</h2>
+<div class="mou-list">
+  <div class="mou-item">
+    <h5>① 桃機 MOU</h5>
+    <p>確保<strong>行李直掛</strong>與<strong>快速通關</strong>，旅客不出境。</p>
+  </div>
+  <div class="mou-item">
+    <h5>② 機捷專車</h5>
+    <p><strong>免費接駁</strong> A12 ⇄ T1/T2，每 10 分鐘一班。</p>
+  </div>
+  <div class="mou-item">
+    <h5>③ 旅客識別</h5>
+    <p>過境簽證/QR 票根綁定，避免身份混淆。</p>
+  </div>
+  <div class="mou-item">
+    <h5>④ 失敗保險</h5>
+    <p>若延誤回機場，提供<strong>責任保險</strong>+航班改簽協助。</p>
+  </div>
+</div>
+
+<h2>客群分流策略 · 過境 vs 長停</h2>
+<table class="spec-table">
+  <thead><tr><th>客群</th><th>停留時間</th><th>產品</th><th>Y5 目標</th><th>對應預算</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>過境旅客（D1）</strong></td>
+      <td>0.6 → 1 小時（v6 新增軌道）</td>
+      <td>機場過境 60 分模組</td>
+      <td><strong>45 萬人次/年</strong></td>
+      <td>AR + 過境模組 1,000 萬</td>
+    </tr>
+    <tr>
+      <td><strong>長停旅客（D2）</strong></td>
+      <td>3 → 4 小時</td>
+      <td>投影主廳 + VR + 文創 + 餐飲</td>
+      <td>長停國際 25%</td>
+      <td>投影主廳 1,200 萬 + VR 2,400 萬</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>KPI 預估</h2>
+<table class="spec-table">
+  <thead><tr><th>指標</th><th>Y1</th><th>Y3</th><th>Y5</th></tr></thead>
+  <tbody>
+    <tr><td>過境模組使用人次</td><td>12 萬</td><td>30 萬</td><td><strong style="color:var(--crimson)">45 萬</strong></td></tr>
+    <tr><td>過境平均停留</td><td>0.6 hr</td><td>0.8 hr</td><td><strong>1 hr</strong></td></tr>
+    <tr><td>單客貢獻（紀念品+電子集章）</td><td>NT$80</td><td>NT$120</td><td><strong>NT$180</strong></td></tr>
+    <tr><td>桃機合作層級</td><td>MOU 簽約</td><td>共同行銷</td><td><strong>桃機官方推薦</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>戰略意義：</strong>桃機年旅客 ≈ 4,500 萬人次 [L1]，過境佔比過半。本模組將 0.1% 過境旅客轉換為文化體驗者（45 萬人次/年），為桃園市創造「<strong>不出境的城市印象</strong>」，補足國際門戶城市文化辨識度凹陷（W1）。
+</div>
+
+<div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
+  <a href="chapter3-ar.html" class="btn btn-primary">◂ AR 城市點位</a>
+  <a href="chapter3-vr.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">投影主廳 + VR ▸</a>
+  <a href="chapter4-feasibility.html" class="btn btn-ghost" style="color:var(--military);border-color:var(--military)">財務 NPV</a>
+</div>
+
+</main>
+<footer class="site-foot">
+  <div class="foot-bottom">
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v6.0</small>
+    <small>P13 / 25 · 3.3-A 機場過境 60 分鐘專屬模組（v6 NEW）</small>
+  </div>
+</footer>
+</div>
+<script src="../js/main.js"></script>
+</body>
+</html>
