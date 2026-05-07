@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>機場過境 60 分鐘 · 純航廈內版 — 等待的天空 v7.0</title>
+<title>過境 6hr+ 黑貓一條龍 4hr 套裝 — 等待的天空 v7.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../css/main.css" />
 <link rel="stylesheet" href="../css/animations.css" />
@@ -25,8 +25,8 @@
     animation: starsDrift 50s linear infinite;
   }
 
-  /* 60 分時間軸 v7 - 純航廈內三階段 */
-  .timeline-60 {
+  /* 4hr 五階段時間軸 */
+  .timeline-240 {
     background: var(--paper);
     border: 1px solid var(--khaki);
     padding: 32px;
@@ -35,16 +35,11 @@
   }
   .timeline-track {
     display: grid;
-    grid-template-columns: repeat(60, 1fr);
+    grid-template-columns: repeat(240, 1fr);
     gap: 1px;
     margin-bottom: 16px;
     height: 80px;
     position: relative;
-  }
-  .timeline-segment {
-    background: var(--paper-warm);
-    position: relative;
-    overflow: hidden;
   }
   .timeline-stage {
     position: absolute;
@@ -56,14 +51,18 @@
     letter-spacing: 1px;
     display: flex;
     align-items: center;
+    justify-content: center;
     border-right: 1px solid rgba(244,235,208,.3);
+    text-align: center;
   }
-  .stage-1 { background: var(--khaki-deep); left: 0; width: 8.33%; }
-  .stage-2 { background: var(--military); left: 8.33%; width: 75%; }
-  .stage-3 { background: var(--crimson); left: 83.33%; width: 16.67%; }
+  .stage-1 { background: var(--khaki-deep); left: 0; width: 14.58%; }
+  .stage-2 { background: var(--cyan-ink); left: 14.58%; width: 10.42%; }
+  .stage-3 { background: var(--crimson); left: 25%; width: 37.5%; }
+  .stage-4 { background: var(--cyan-ink); left: 62.5%; width: 10.42%; }
+  .stage-5 { background: var(--khaki-deep); left: 72.92%; width: 27.08%; }
   .timeline-axis {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     font-family: var(--mono);
     font-size: 11px;
     color: var(--khaki-deep);
@@ -75,7 +74,7 @@
   /* 階段卡片 */
   .stage-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px;
     margin: 32px 0;
   }
@@ -86,9 +85,9 @@
     padding: 24px;
     position: relative;
   }
-  .stage-card.s1 { border-top-color: var(--khaki-deep); }
-  .stage-card.s2 { border-top-color: var(--military); }
-  .stage-card.s3 { border-top-color: var(--crimson); }
+  .stage-card.s1, .stage-card.s5 { border-top-color: var(--khaki-deep); }
+  .stage-card.s2, .stage-card.s4 { border-top-color: var(--cyan-ink); }
+  .stage-card.s3 { border-top-color: var(--crimson); background: var(--paper-warm); }
   .stage-card .stage-num {
     position: absolute; top: -16px; left: 16px;
     background: var(--ink); color: var(--paper);
@@ -108,46 +107,120 @@
     letter-spacing: 2px;
     margin-bottom: 12px;
   }
+  .stage-card.s3 .time-tag { background: var(--crimson); color: var(--paper); }
   .stage-card h4 { font-family: var(--serif-tc); font-size: 17px; letter-spacing: 3px; margin-bottom: 8px; }
   .stage-card .loc { font-family: var(--mono); font-size: 11px; color: var(--khaki-deep); margin-bottom: 12px; letter-spacing: 1px; }
   .stage-card p { font-size: 13px; line-height: 1.7; }
 
-  /* 物理可行說明 */
-  .feasibility-grid {
+  /* 90 分 4 站體驗（核心） */
+  .core-stations {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
     margin: 24px 0;
   }
-  .feasibility-item {
-    background: var(--paper-warm);
-    border-left: 4px solid var(--military);
-    padding: 18px;
+  .core-station {
+    background: linear-gradient(135deg, #1a2538 0%, #0a1628 100%);
+    color: var(--paper);
+    padding: 24px;
+    border-left: 4px solid var(--gold);
+    position: relative;
   }
-  .feasibility-item h5 { font-family: var(--serif-tc); font-size: 15px; letter-spacing: 2px; margin-bottom: 6px; color: var(--military-deep); }
-  .feasibility-item p { font-size: 13px; line-height: 1.6; }
+  .core-station::before {
+    content: attr(data-num);
+    position: absolute;
+    top: 14px; right: 14px;
+    background: var(--gold); color: var(--ink);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-weight: 800;
+    font-size: 14px;
+  }
+  .core-station h5 { font-family: var(--serif-tc); font-size: 16px; letter-spacing: 3px; margin-bottom: 8px; color: var(--gold); }
+  .core-station .duration { font-family: var(--mono); font-size: 11px; color: var(--khaki); margin-bottom: 8px; letter-spacing: 1px; }
+  .core-station p { font-size: 13px; line-height: 1.7; opacity: .9; }
 
-  /* 對比表 */
-  .v6-v7-compare {
+  /* 套裝定價 */
+  .pricing-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin: 24px 0;
   }
-  @media (max-width: 720px) { .v6-v7-compare { grid-template-columns: 1fr; } }
-  .compare-old, .compare-new {
-    padding: 24px;
-    border: 2px dashed;
+  @media (max-width: 720px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .pricing-card {
+    padding: 28px;
+    border: 2px solid var(--khaki);
+    background: var(--paper);
   }
-  .compare-old { border-color: var(--crimson); background: rgba(163,22,45,.08); }
-  .compare-new { border-color: var(--military); background: rgba(74,93,58,.08); }
-  .compare-old h4, .compare-new h4 { font-family: var(--serif-tc); letter-spacing: 3px; margin-bottom: 12px; }
-  .compare-old h4 { color: var(--crimson); }
-  .compare-new h4 { color: var(--military-deep); }
-  .compare-old ul, .compare-new ul { list-style: none; padding-left: 0; }
-  .compare-old li, .compare-new li { padding: 6px 0 6px 24px; position: relative; font-size: 13px; }
-  .compare-old li::before { content: '✕'; position: absolute; left: 0; color: var(--crimson); font-weight: 800; }
-  .compare-new li::before { content: '✓'; position: absolute; left: 0; color: var(--military); font-weight: 800; }
+  .pricing-card.business { border-color: var(--gold); background: linear-gradient(135deg, var(--paper-warm), var(--paper)); }
+  .pricing-card .badge {
+    display: inline-block;
+    background: var(--ink); color: var(--paper);
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .pricing-card.business .badge { background: var(--gold); color: var(--ink); }
+  .pricing-card h4 { font-family: var(--serif-tc); font-size: 22px; letter-spacing: 4px; margin-bottom: 6px; }
+  .pricing-card .price { font-family: var(--display); font-weight: 800; font-size: 36px; color: var(--crimson); margin: 12px 0; }
+  .pricing-card .price small { font-size: 14px; color: var(--khaki-deep); font-weight: 400; }
+  .pricing-card .breakdown { font-family: var(--mono); font-size: 11px; color: var(--khaki-deep); margin: 8px 0; line-height: 1.7; }
+  .pricing-card ul { padding-left: 20px; font-size: 13px; line-height: 1.8; }
+
+  /* 7 打卡點 */
+  .checkpoints {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .checkpoint {
+    background: var(--paper-warm);
+    border-left: 3px solid var(--peach-deep);
+    padding: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .checkpoint .icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+  /* 客源分流 */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .audience-tier {
+    padding: 18px;
+    border-left: 4px solid;
+    background: var(--paper);
+  }
+  .audience-tier.l1 { border-color: var(--military); }
+  .audience-tier.l2 { border-color: var(--gold); }
+  .audience-tier.exclude { border-color: var(--crimson); background: rgba(163,22,45,.06); }
+  .audience-tier h5 { font-family: var(--serif-tc); font-size: 15px; letter-spacing: 2px; margin-bottom: 6px; }
+  .audience-tier p { font-size: 13px; line-height: 1.6; }
+
+  /* 容錯五重 */
+  .resilience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .resilience-item {
+    background: var(--paper-warm);
+    border-top: 3px solid var(--military);
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .resilience-item strong { display: block; font-family: var(--serif-tc); letter-spacing: 2px; color: var(--military-deep); margin-bottom: 4px; }
 </style>
 </head>
 <body>
@@ -159,7 +232,7 @@
     <li><a href="executive-summary.html">執行摘要</a></li>
     <li><a href="chapter3-vr.html">投影主廳</a></li>
     <li><a href="chapter3-ar.html">AR 點位</a></li>
-    <li><a href="chapter3-airport-60min.html">過境 60 分</a></li>
+    <li><a href="chapter3-airport-60min.html">過境一條龍</a></li>
     <li><a href="chapter3-ai.html">AI 對話</a></li>
     <li><a href="medal.html">勳章</a></li>
   </ul>
@@ -167,146 +240,232 @@
 
 <div class="page-shell">
 <header class="page-hero transit-hero">
-  <p class="subtitle">CHAPTER 3.3-A · TRANSIT 60-MIN · IN-TERMINAL VERSION</p>
-  <h1>機場過境 60 分鐘・純航廈內版（v7）</h1>
-  <p class="crumbs"><a href="../index.html">首頁</a> / 四維融合 / 戒離航廈設計（v7 物理可行版）· P13</p>
+  <p class="subtitle">CHAPTER 3.3 · TRANSIT 6HR+ · BLACK CAT 4HR PACKAGE</p>
+  <h1>過境 6hr+ 黑貓一條龍 4 hr 套裝</h1>
+  <p class="crumbs"><a href="../index.html">首頁</a> / 四維融合 / 機場消費 → 航空博物館深度體驗（v7.1 核心轉折）· P13</p>
 </header>
 
 <main class="content-wrap">
 <a href="../index.html" class="back-home">回首頁</a>
 
 <div class="callout callout-warn">
-  <strong>v7 結構性修正 — 戒離航廈：</strong>v6 設計依賴「機捷 A12 接駁博物館」，<strong>對 60 分鐘過境旅客物理不可行</strong>（行李直掛、出入境、航班壓力等剛性限制）。本版改為「<strong>純航廈內 60 分微體驗</strong>」— 不離開候機區、不依賴機捷、不需出入境通關。<br/>
-  <strong>客群分流：</strong>60 分內 → 純航廈微體驗；<strong>90 分以上長停 → 才使用機捷接駁</strong>至博物館完整體驗。
+  <strong>v7.1 核心策略轉折：</strong>把<strong>桃園機場過境消費</strong>引流至<strong>航空博物館</strong>，做好「<strong>機場 → 機捷 → 基地 → 機捷 → 機場</strong>」一條龍服務，讓 ≥6 hr 過境旅客在 4 小時內完成 90 分鐘黑貓深度體驗 + 150 分鐘可控物流。
 </div>
 
-<h2>v6 vs v7 設計對比</h2>
-<div class="v6-v7-compare">
-  <div class="compare-old">
-    <h4>v6 過境模組（已廢止）</h4>
-    <ul>
-      <li>0–5 分：T1/T2 過境櫃台登記</li>
-      <li>5–25 分：航廈微展區</li>
-      <li>25–35 分：機捷 A12 接駁（10 分）</li>
-      <li>35–55 分：博物館投影主廳速覽</li>
-      <li>55–60 分：機捷回 T1/T2</li>
-      <li class="">問題：依賴機捷接駁、需出航廈、行李直掛複雜、延誤回航班責任保險昂貴</li>
-    </ul>
+<h2>主收益模組 · 過境 6hr+ 黑貓一條龍 4hr 套裝</h2>
+
+<h3>客群嚴控（合規必要條件）</h3>
+<div class="audience-grid">
+  <div class="audience-tier l1">
+    <h5>L1 免簽國（主力）</h5>
+    <p>美/加（80% 北美航線主力）<br/>澳紐 / 日韓 / 歐盟 / 英國</p>
   </div>
-  <div class="compare-new">
-    <h4>v7 純航廈內版（本案）</h4>
-    <ul>
-      <li>0–5 分：候機區登記點</li>
-      <li>5–50 分：航廈內微展區（4 米 LED + AR）</li>
-      <li>50–60 分：回登機門</li>
-      <li>不離航廈、不出境、不過海關</li>
-      <li>不依賴外部接駁、無延誤責任保險</li>
-      <li>桃機 MOU 僅需空間使用授權</li>
-    </ul>
+  <div class="audience-tier l2">
+    <h5>L2 TWOV 過境免簽</h5>
+    <p>持有效返程票<br/>東南亞 TWOV（菲越裔返美）</p>
+  </div>
+  <div class="audience-tier exclude">
+    <h5>排除（不適用）</h5>
+    <p>L3 eVisa 國<br/>L4 一般簽證國</p>
   </div>
 </div>
 
-<h2>純航廈內 · 三階段時間軸</h2>
-<div class="timeline-60">
+<div class="callout">
+  <strong>競合對標（雙券分立、不互抵）：</strong>
+  · <strong>桃機官方 Free Half-Day Tour：</strong>免費市區半日遊<br/>
+  · <strong>觀光署 NT$600 機場禮券：</strong>限機場合作商家<br/>
+  · <strong>本案套裝：</strong>差異化「主題深度體驗」付費商品，雙券分立、不互抵
+</div>
+
+<h3>4 小時時段表（誠實 240 分中 90 分體驗 + 150 分物流）</h3>
+<div class="timeline-240">
   <div class="timeline-track">
-    <div class="timeline-stage stage-1">登錄</div>
-    <div class="timeline-stage stage-2">微體驗（4 米 LED + AR）</div>
-    <div class="timeline-stage stage-3">回登機門</div>
+    <div class="timeline-stage stage-1">通關+寄物 35 分</div>
+    <div class="timeline-stage stage-2">機捷 25 分</div>
+    <div class="timeline-stage stage-3">基地 4 站體驗 90 分</div>
+    <div class="timeline-stage stage-4">機捷 25 分</div>
+    <div class="timeline-stage stage-5">機場緩衝 65 分</div>
   </div>
   <div class="timeline-axis">
-    <span>0 分</span><span>10 分</span><span>20 分</span><span>30 分</span><span>40 分</span><span>50 分</span><span>60 分</span>
+    <span>0:00</span><span>0:30</span><span>1:00</span><span>1:30</span><span>2:00</span><span>2:30</span><span>3:00</span><span>3:30</span><span>4:00</span>
   </div>
 </div>
 
 <div class="stage-cards">
   <div class="stage-card s1">
     <span class="stage-num">1</span>
-    <span class="time-tag">0–5 分</span>
-    <h4>登錄</h4>
-    <p class="loc">T1 / T2 候機區登記點</p>
-    <p>AR APP 下載 + 登機證 QR 綁定。<strong>無需出航廈、無需通關</strong>。</p>
+    <span class="time-tag">0:00–0:35（35 分）</span>
+    <h4>出境通關 + 寄存</h4>
+    <p class="loc">桃機 T1 / T2</p>
+    <p>過境/長停旅客 Fast Track 出境通關 + 寄存登機箱。商務版含私人接駁。</p>
   </div>
   <div class="stage-card s2">
     <span class="stage-num">2</span>
-    <span class="time-tag">5–50 分（45 分鐘）</span>
-    <h4>微體驗（航廈內）</h4>
-    <p class="loc">T1 / T2 微展區（候機區內・免出境）</p>
-    <p>
-      <strong>4 米 LED 牆迷你投影：</strong>「冷戰天空」濃縮 8 分鐘版本（從投影主廳 12 分版剪輯）<br/>
-      <strong>AR 互動：</strong>U-2 機型 3D 模型、黑貓中隊解密文件、桃花飛機勳章 NFC 收藏<br/>
-      <strong>停留節奏：</strong>觀眾可自由進出，不強制完成
-    </p>
+    <span class="time-tag">0:35–1:00（25 分）</span>
+    <h4>機捷接駁</h4>
+    <p class="loc">機捷</p>
+    <p>普通車（T1=A12 / T2=A13）→ <strong>A16 橫山</strong>（直達車不停 A16，故必搭普通車）+ 接駁專車。</p>
   </div>
   <div class="stage-card s3">
     <span class="stage-num">3</span>
-    <span class="time-tag">50–60 分</span>
-    <h4>回登機門</h4>
-    <p class="loc">原候機門</p>
-    <p>10 分鐘安全餘裕回登機門。電子集章 + 紀念品 QR 兌換。</p>
+    <span class="time-tag">1:00–2:30（90 分・核心）</span>
+    <h4>★ 黑貓基地 4 站體驗</h4>
+    <p class="loc">航空博物館</p>
+    <p>v7.1 核心 — <strong>機場消費移至此</strong>。下方 4 站詳述。</p>
+  </div>
+  <div class="stage-card s4">
+    <span class="stage-num">4</span>
+    <span class="time-tag">2:30–2:55（25 分）</span>
+    <h4>接駁回機場</h4>
+    <p class="loc">機捷 + 專車</p>
+    <p>同路徑回程，可於車上完成 AR 集章與紀念品 QR 兌換。</p>
+  </div>
+  <div class="stage-card s5">
+    <span class="stage-num">5</span>
+    <span class="time-tag">2:55–4:00（65 分）</span>
+    <h4>機場緩衝</h4>
+    <p class="loc">桃機</p>
+    <p>提領寄存箱 + 入關 + 安檢 + 登機門 ≥ 40 分緩衝。<strong>觀光署 NT$600 禮券於此時段使用</strong>於機場免稅店。</p>
   </div>
 </div>
 
-<h2>v7 物理可行性確認</h2>
-<div class="feasibility-grid">
-  <div class="feasibility-item">
-    <h5>① 不出航廈</h5>
-    <p>微展區設於候機區內，旅客<strong>無需通關、無需出航廈</strong>，無行李直掛複雜性。</p>
+<h2>★ 90 分 4 站基地體驗（輕量化深度套裝）</h2>
+<div class="core-stations">
+  <div class="core-station" data-num="1">
+    <h5>① 換裝簡報</h5>
+    <p class="duration">15 分鐘</p>
+    <p>煤油燈 + 打字機簽到。借用 1962 風格軍裝/旗袍/空姐制服拍照。<strong>進入冷戰之天的儀式感入口</strong>。</p>
   </div>
-  <div class="feasibility-item">
-    <h5>② 不依賴機捷</h5>
-    <p>不需 A12 接駁，<strong>移除最大時程風險</strong>。航班延誤旅客不影響本案責任。</p>
+  <div class="core-station" data-num="2">
+    <h5>② 沉浸體驗（擇一）</h5>
+    <p class="duration">25 分鐘</p>
+    <p><strong>投影主廳 12 分版</strong>（套裝專屬縮短）<br/>或 <strong>VR-A U-2 座艙 8 分加購</strong>（NT$300）</p>
   </div>
-  <div class="feasibility-item">
-    <h5>③ 桃機 MOU 簡化</h5>
-    <p>僅需「<strong>空間使用授權</strong>」（4 米 LED 牆 + AR 互動展區），無需協調行李、海關、接駁。</p>
+  <div class="core-station" data-num="3">
+    <h5>③ 冷戰下午茶 + 調酒</h5>
+    <p class="duration">35 分鐘</p>
+    <p>煤油燈 + 黑膠唱片 + 爵士樂氛圍。Highball 調酒 / 冷戰時期軍方咖啡 / 戰時雞尾酒。</p>
   </div>
-  <div class="feasibility-item">
-    <h5>④ 無責任保險負擔</h5>
-    <p>不離航廈即無延誤回機場風險，<strong>無需高額責任保險</strong>。</p>
+  <div class="core-station" data-num="4">
+    <h5>④ 紀念品 + 打卡 + 家書</h5>
+    <p class="duration">15 分鐘</p>
+    <p>「等你回家」橫幅打卡點 + 復古打字機寫一封家書（可寄回家鄉地址）+ 桃花飛機戳章紀念。</p>
   </div>
 </div>
 
-<h2>客群分流策略 · 60 分 vs 90+ 分</h2>
+<h2>套裝定價（雙版本）</h2>
+<div class="pricing-grid">
+  <div class="pricing-card">
+    <span class="badge">標準版</span>
+    <h4>過境一條龍 · 標準</h4>
+    <p class="price">NT$2,400<small> /人</small></p>
+    <p class="breakdown">
+      = 自付 NT$1,800<br/>
+      + 觀光署核銷補貼 NT$600（Phase 0 政策爭取成功時適用）<br/>
+      = 總營收 NT$2,400
+    </p>
+    <ul>
+      <li>機捷普通車 + 接駁專車</li>
+      <li>90 分 4 站基地深度體驗</li>
+      <li>1 杯飲品 + 簡餐</li>
+      <li>紀念品 + 桃花飛機戳章</li>
+    </ul>
+  </div>
+  <div class="pricing-card business">
+    <span class="badge">★ 商務版</span>
+    <h4>過境一條龍 · 商務</h4>
+    <p class="price">NT$3,600<small> /人</small></p>
+    <p class="breakdown">
+      含 <strong>Fast Track ≤ 15 分</strong>（標配）<br/>
+      含 <strong>私人接駁</strong>（避開機捷時段風險）
+    </p>
+    <ul>
+      <li>Fast Track 出境通關標配</li>
+      <li>私人接駁專車（時段彈性）</li>
+      <li>同 90 分 4 站體驗</li>
+      <li>升級調酒 + 商務簡餐</li>
+      <li>商務套件（家書封蠟 + 限量勳章）</li>
+    </ul>
+  </div>
+</div>
+
+<h2>NT$600 觀光署禮券引導（時間嚴控雙券分立）</h2>
+<div class="callout callout-warn">
+  <strong>關鍵設計：</strong>觀光署 NT$600 機場禮券<strong>僅限旅客結束 120 分基地行程、回機場通關安檢後的候機緩衝期（2:55–4:00 內）</strong>用於機場免稅店。<br/>
+  <br/>
+  <strong>時間嚴控原因：</strong>避免行前消費影響接駁時程，確保 90 分基地體驗不被壓縮。<br/>
+  <strong>雙券分立：</strong>本案套裝 NT$2,400/3,600 與觀光署 NT$600 禮券<strong>不互抵</strong>，旅客可同時享有兩種優惠。
+</div>
+
+<h2>7 大打卡點 + Hashtag 行銷</h2>
+<div class="checkpoints">
+  <div class="checkpoint"><span class="icon">🎖️</span>等你回家勳章拱門</div>
+  <div class="checkpoint"><span class="icon">🛢️</span>煤油燈軍裝合影</div>
+  <div class="checkpoint"><span class="icon">🎵</span>黑膠 + 機師沙龍</div>
+  <div class="checkpoint"><span class="icon">✈️</span>U-2 駕駛艙</div>
+  <div class="checkpoint"><span class="icon">🥣</span>軍眷搪瓷碗</div>
+  <div class="checkpoint"><span class="icon">📜</span>打字機家書</div>
+  <div class="checkpoint"><span class="icon">🌸</span>桃花飛機戳章</div>
+</div>
+<p style="text-align:center;margin:16px 0;font-family:var(--mono);font-size:13px;letter-spacing:3px;color:var(--khaki-deep);">
+  Hashtag：<strong style="color:var(--crimson)">#WaitingSky</strong>（主） / #Taoyuan1962（次）
+</p>
+
+<h2>客源行銷分層（L1 + L2 同步）</h2>
 <table class="spec-table">
-  <thead><tr><th>客群</th><th>停留時間</th><th>產品（v7）</th><th>是否離航廈</th><th>是否需機捷</th></tr></thead>
+  <thead><tr><th>層級</th><th>客群</th><th>行銷主題</th><th>通路</th></tr></thead>
   <tbody>
     <tr>
-      <td><strong>過境 60 分（本頁）</strong></td>
-      <td>≤ 60 分</td>
-      <td>航廈內 4 米 LED + AR</td>
-      <td><strong style="color:var(--military)">不離航廈</strong></td>
-      <td><strong style="color:var(--military)">不需要</strong></td>
+      <td><strong>L1 美/加</strong></td>
+      <td>北美航線主力（80%）</td>
+      <td>U-2 + CIA 解密、軍事航空深度</td>
+      <td>機艙雜誌 + 美僑會通路</td>
     </tr>
     <tr>
-      <td><strong>長停 90+ 分</strong></td>
-      <td>≥ 90 分（含通關 30 分）</td>
-      <td>機捷接駁 → 博物館投影主廳完整體驗</td>
-      <td>離航廈</td>
-      <td>機捷 A12 接駁</td>
+      <td><strong>L1 澳紐 + 日韓 + 歐</strong></td>
+      <td>長程過境</td>
+      <td>小酒館雞尾酒 / 1962 細節 / 家書打字機 / 桃花季聯名</td>
+      <td>影視 IP 粉絲圈、文藝雜誌</td>
     </tr>
     <tr>
-      <td><strong>長停旅客（D2）</strong></td>
-      <td>3–4 小時</td>
-      <td>投影主廳 + VR + 文創 + 餐飲</td>
-      <td>離航廈</td>
-      <td>機捷 / 計程車 / 自駕</td>
+      <td><strong>L2 東南亞 TWOV</strong></td>
+      <td>菲越裔返美旅客</td>
+      <td>越戰共振 + 復古軍裝 IG 拍照</td>
+      <td>東南亞 KOL、IG 短影音</td>
     </tr>
   </tbody>
 </table>
 
-<h2>KPI 預估（v7 對齊 P22）</h2>
+<h2>容錯五重設計（風險控管）</h2>
+<div class="resilience-grid">
+  <div class="resilience-item"><strong>① ≥6 hr 嚴控</strong>排除短轉機客，避開航班壓力</div>
+  <div class="resilience-item"><strong>② 冗餘交通</strong>機捷 + 接駁 + 私人車多選</div>
+  <div class="resilience-item"><strong>③ 站點可中斷</strong>4 站皆可單站退出</div>
+  <div class="resilience-item"><strong>④ 遲返保險</strong>含航班改簽協助</div>
+  <div class="resilience-item"><strong>⑤ Fast Track ≤15 分</strong>商務版標配</div>
+</div>
+
+<h2>波段擴展與 AR 5 站</h2>
+<div class="callout">
+  <strong>波段：</strong>Y1 → Y3 由 1 班/日 → 3 班/日；<strong>接駁 OPEX 月租</strong>分散風險（接駁專車不整買）。<br/>
+  <strong>AR 5 站：</strong>① A16 橫山 [L1] / ② 空軍基地 U-2 [L1] / ③ 大園眷村 [L2] / ④ 藝文特區 [L3] / ⑤ T1+T2 候機區 [L3]
+</div>
+
+<h2>KPI 預估（v7.1 嚴控客群）</h2>
 <table class="spec-table">
   <thead><tr><th>指標</th><th>Y1</th><th>Y3</th><th>Y5</th></tr></thead>
   <tbody>
-    <tr><td>過境模組使用人次（v7 純航廈內）</td><td>5 萬</td><td>25 萬</td><td><strong style="color:var(--crimson)">40 萬</strong></td></tr>
-    <tr><td>過境平均體驗時長</td><td>30 分</td><td>40 分</td><td><strong>45 分</strong></td></tr>
-    <tr><td>單客貢獻（紀念品+電子集章）</td><td>NT$60</td><td>NT$100</td><td><strong>NT$150</strong></td></tr>
-    <tr><td>桃機合作層級</td><td>空間 MOU</td><td>共同行銷</td><td><strong>桃機官方推薦</strong></td></tr>
+    <tr><td><strong>過境一條龍套裝人次</strong>（嚴控 ≥6 hr）</td><td>1.5 萬</td><td>4 萬</td><td><strong style="color:var(--crimson)">8 萬</strong></td></tr>
+    <tr><td>套裝平均體驗時長</td><td>4 hr</td><td>4 hr</td><td><strong>4 hr</strong></td></tr>
+    <tr><td>標準/商務比例</td><td>9 : 1</td><td>8 : 2</td><td><strong>7 : 3</strong></td></tr>
+    <tr><td>單客 ARPU（含套裝+紀念品+觀光署禮券）</td><td>NT$2,400</td><td>NT$2,500</td><td><strong>NT$2,600</strong></td></tr>
+    <tr><td>套裝年營收</td><td>3,600 萬</td><td>9,600 萬</td><td><strong>2 億+</strong></td></tr>
+    <tr><td>桃機合作層級</td><td>MOU</td><td>共同行銷</td><td><strong>桃機官方推薦</strong></td></tr>
   </tbody>
 </table>
 
 <div class="callout">
-  <strong>戰略意義（v7 修正）：</strong>本模組將過境旅客<strong>不必離開候機區即可體驗桃園在地文化</strong>，桃機合作層級從「物流、海關、接駁、保險」四方協調簡化為「<strong>空間授權</strong>」單方協議，可行性大幅提升。Y5 目標 40 萬過境體驗者（占桃機過境 0.1%）。
+  <strong>戰略意義（v7.1 核心）：</strong>本套裝把桃機過境旅客原本在機場免稅店的「<strong>分散消費</strong>」轉化為航空博物館的「<strong>主題深度體驗 + 整套消費</strong>」，搭配觀光署 NT$600 雙券分立，讓 ≥6 hr 過境旅客在 4 小時內完成 90 分鐘黑貓深度體驗 + 150 分鐘可控物流，創造桃園「<strong>不出城市、深度體驗、整合消費</strong>」的國際過境品牌印象。
 </div>
 
 <div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;">
@@ -318,8 +477,8 @@
 </main>
 <footer class="site-foot">
   <div class="foot-bottom">
-    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v7.0</small>
-    <small>P13 / 25 · 3.3-A 機場過境 60 分・純航廈內版（v7 物理可行）</small>
+    <small>★ 黑貓任務小組 · 飛過冷戰，等你回家 · v7.1</small>
+    <small>P13 / 25 · 3.3 過境 6hr+ 黑貓一條龍 4hr 套裝（v7.1 機場消費→航空博物館）</small>
   </div>
 </footer>
 </div>
