@@ -8,6 +8,8 @@
 ## 🏆 TIMS 2026 城市行銷企劃競賽規則對齊檢查表
 
 > 對齊 [台灣行銷科學學會 2026 城市行銷企劃競賽](https://www.tims.org.tw/) STAGE 2 書面審查規則
+>
+> 📋 **送件前必看：** [SUBMISSION_CHECKLIST.md](./SUBMISSION_CHECKLIST.md) — 8 大區塊完整驗收清單（紅線 / 封面 / 內容 / 評分 / 史實 / PDF 技術 / 流程 / STAGE 3 準備）
 
 ### STAGE 2 書面審查格式規範
 
