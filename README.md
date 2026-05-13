@@ -120,17 +120,17 @@
 
 ### 方法 1：GitHub Pages（推薦・1 分鐘上線）
 
-1. 前往 [Settings → Pages](https://github.com/marco3939/taoyuan1965/settings/pages)
+1. 前往 [Settings → Pages](https://github.com/marco3939/taoyuan1962/settings/pages)
 2. **Source** 選 `Deploy from a branch`
 3. **Branch** 選 `claude/aviation-city-interactive-app-YgBXe` → `/ (root)` → 按 **Save**
 4. 約 1–2 分鐘後上線於：
-   👉 **https://marco3939.github.io/taoyuan1965/**
+   👉 **https://marco3939.github.io/taoyuan1962/**
 
 ### 方法 2：本機預覽
 
 ```bash
-git clone https://github.com/marco3939/taoyuan1965.git
-cd taoyuan1965
+git clone https://github.com/marco3939/taoyuan1962.git
+cd taoyuan1962
 git checkout claude/aviation-city-interactive-app-YgBXe
 python3 -m http.server 8000
 # 開啟 http://localhost:8000
