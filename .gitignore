@@ -1,6 +1,8 @@
-# 不推送企劃書原檔（保留大會匿名審查保護）
+# 不推送外部來源 PDF（保留大會匿名審查保護）
 blueprint.pdf
-*.pdf
+
+# 但允許 deliverables/ 內的官方送件版 PDF
+!deliverables/*.pdf
 
 # 暫存與系統檔
 .DS_Store
