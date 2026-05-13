@@ -10,9 +10,26 @@
 <style>
   .yiba-hero {
     background:
-      linear-gradient(135deg, rgba(232,164,184,.6), rgba(244,235,208,.4)),
-      radial-gradient(circle at 30% 30%, var(--peach-light), transparent 60%);
-    color: var(--ink);
+      linear-gradient(180deg, rgba(10,22,40,.45) 0%, rgba(10,22,40,.15) 40%, rgba(10,22,40,.7) 100%),
+      url('../assets/images/vr04-airport-wall.jpg') center / cover no-repeat;
+    color: var(--paper);
+    min-height: 380px;
+    position: relative;
+  }
+  .yiba-hero h1 {
+    color: var(--paper);
+    text-shadow: 0 4px 16px rgba(0,0,0,.6);
+  }
+  .yiba-hero .subtitle {
+    color: var(--gold) !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,.7);
+  }
+  .yiba-hero .crumbs {
+    color: var(--paper-warm);
+    text-shadow: 0 1px 4px rgba(0,0,0,.7);
+  }
+  .yiba-hero .crumbs a {
+    color: var(--peach-light);
   }
   .crosswalk { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
   .crosswalk > div {
