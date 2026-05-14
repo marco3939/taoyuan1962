@@ -7,6 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../css/main.css" />
 <link rel="stylesheet" href="../css/animations.css" />
+<!-- Pannellum 360 panorama viewer -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+<script defer src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 <style>
   /* VR 場景卡 */
   .vr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 32px 0; }
@@ -214,13 +217,48 @@
   </figure>
 </div>
 
-<h3 style="margin-top:32px;">★ VR-03 眷舍客廳 · 360 全景沉浸版（CG 補強）</h3>
-<figure style="margin:24px 0;">
-  <img src="../assets/images/vr03-360-panorama.jpg" alt="VR-03 眷舍客廳 360 全景沉浸版" style="width:100%;display:block;box-shadow:var(--shadow-deep);border:1px solid var(--khaki);">
-  <figcaption style="font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--khaki-deep);margin-top:10px;text-align:center;">
-    ▲ <strong>VR-03 眷舍客廳 360 全景</strong>（補水彩之外的 CG 沉浸版・觀眾於 VR 內可 6DoF 移動）<span class="tag">[L2]</span><span class="tag">[L3]</span>
-  </figcaption>
-</figure>
+<h3 style="margin-top:32px;">★ VR-03 眷舍客廳 · 360 全景互動沉浸版（CG 補強）</h3>
+<div class="callout">
+  <strong>互動操作：</strong>滑鼠<strong>拖曳</strong>四處看 · 滑鼠<strong>滾輪</strong>縮放 · 右下<strong>⛶</strong> 全螢幕 · 手機可直接觸控旋轉
+</div>
+<div id="panorama-vr03" style="width:100%;aspect-ratio:16/9;border:2px solid var(--gold);box-shadow:var(--shadow-deep);margin:16px 0;background:#1a1a1a;"></div>
+<p style="font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--khaki-deep);text-align:center;">
+  ▲ <strong>VR-03 眷舍客廳・360° 互動全景</strong>（拖曳旋轉視角）· 補水彩之外的 CG 沉浸版・觀眾於 VR 內可 6DoF 移動 <span class="tag">[L2]</span><span class="tag">[L3]</span>
+</p>
+
+<script>
+window.addEventListener('load', function () {
+  if (typeof pannellum === 'undefined') {
+    console.warn('Pannellum 未載入，重試中...');
+    setTimeout(initPanorama, 800);
+    return;
+  }
+  initPanorama();
+});
+function initPanorama () {
+  if (!window.pannellum) return;
+  if (document.querySelector('#panorama-vr03 .pnlm-container')) return; // 已初始化
+  pannellum.viewer('panorama-vr03', {
+    type: 'equirectangular',
+    panorama: '../assets/images/vr03-360-panorama.jpg',
+    autoLoad: true,
+    autoRotate: -2,            // 自動慢轉（負值=順時針）
+    autoRotateInactivityDelay: 3000,
+    compass: false,
+    showZoomCtrl: true,
+    showFullscreenCtrl: true,
+    mouseZoom: true,
+    keyboardZoom: true,
+    draggable: true,
+    hfov: 100,                 // 初始視場角度
+    minHfov: 50, maxHfov: 120,
+    yaw: 0, pitch: -5,         // 初始水平/垂直視角
+    title: 'VR-03 眷舍客廳',
+    author: '黑貓任務小組 v9.4',
+    backgroundColor: [0.1, 0.1, 0.1]
+  });
+}
+</script>
 <div class="callout">
   <strong>v9.4 VR 中估規格：</strong>縮為 <strong>1 場景 VR-A U-2 座艙 + 4 艘 8K 6DoF</strong>，預算 800 萬（區間 600–1,400）。<strong>加購 NT$200/人</strong>（套裝體驗第 ② 站擇一，前置預訂避免現場金流延誤動線），定位深度體驗付費客群。<br/><br/>
   <strong>容量計算：</strong>每艙每批 8 人 × 6 場/hr × 4 艙 = <strong>192 人/hr 理論上限</strong>，Y3 中估加購率 35%。<strong>動暈體質可選 VR 觀影區替代</strong>（他人玩、自己看大螢幕）。<br/>
