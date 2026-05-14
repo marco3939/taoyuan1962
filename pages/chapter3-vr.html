@@ -217,47 +217,124 @@
   </figure>
 </div>
 
-<h3 style="margin-top:32px;">★ VR-03 眷舍客廳 · 360 全景互動沉浸版（CG 補強）</h3>
+<h3 style="margin-top:32px;">★ VR-03 眷舍客廳 · 360° 互動沉浸（CG 補強）</h3>
 <div class="callout">
-  <strong>互動操作：</strong>滑鼠<strong>拖曳</strong>四處看 · 滑鼠<strong>滾輪</strong>縮放 · 右下<strong>⛶</strong> 全螢幕 · 手機可直接觸控旋轉
+  <strong>互動操作：</strong>拖曳<strong>旋轉</strong>視角 · 滾輪<strong>縮放</strong> · 點 <strong>ℹ</strong> 看細節說明 · 右下 <strong>⛶</strong> 全螢幕 · 手機可<strong>啟用陀螺儀</strong>隨頭轉動
 </div>
-<div id="panorama-vr03" style="width:100%;aspect-ratio:16/9;border:2px solid var(--gold);box-shadow:var(--shadow-deep);margin:16px 0;background:#1a1a1a;"></div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border:2px solid var(--gold);box-shadow:var(--shadow-deep);margin:16px 0;background:#1a1a1a;">
+  <div id="panorama-vr03" style="width:100%;height:100%;"></div>
+  <button id="gyro-vr03" onclick="toggleGyro('vr03')" style="position:absolute;top:8px;right:8px;z-index:5;background:rgba(20,30,50,.85);color:var(--gold);border:1px solid var(--gold);padding:6px 12px;font-family:var(--mono);font-size:11px;letter-spacing:1px;cursor:pointer;">📱 啟用陀螺儀</button>
+</div>
 <p style="font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--khaki-deep);text-align:center;">
-  ▲ <strong>VR-03 眷舍客廳・360° 互動全景</strong>（拖曳旋轉視角）· 補水彩之外的 CG 沉浸版・觀眾於 VR 內可 6DoF 移動 <span class="tag">[L2]</span><span class="tag">[L3]</span>
+  ▲ VR-03 眷舍客廳・360° CG 沉浸版・含 6 個互動熱點 <span class="tag">[L2]</span><span class="tag">[L3]</span>
+</p>
+
+<h3 style="margin-top:48px;">★ VR-04 機場圍牆外 · 互動沉浸（partial panorama）</h3>
+<div class="callout callout-warn">
+  <strong>注意：</strong>VR-04 目前為水彩平面圖（非真 360 全景源檔），以下用 partial panorama 模式做<strong>有限角度拖曳互動</strong>。未來補 360 等距投影源檔後可升級為完整 360°。
+</div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;border:2px solid var(--peach-deep);box-shadow:var(--shadow-deep);margin:16px 0;background:#1a1a1a;">
+  <div id="panorama-vr04" style="width:100%;height:100%;"></div>
+  <button id="gyro-vr04" onclick="toggleGyro('vr04')" style="position:absolute;top:8px;right:8px;z-index:5;background:rgba(20,30,50,.85);color:var(--peach-light);border:1px solid var(--peach-light);padding:6px 12px;font-family:var(--mono);font-size:11px;letter-spacing:1px;cursor:pointer;">📱 啟用陀螺儀</button>
+</div>
+<p style="font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--khaki-deep);text-align:center;">
+  ▲ VR-04 機場圍牆外・partial panorama 互動・含 5 個敘事熱點 <span class="tag">[L2]</span><span class="tag">[L3]</span>
 </p>
 
 <script>
-window.addEventListener('load', function () {
-  if (typeof pannellum === 'undefined') {
-    console.warn('Pannellum 未載入，重試中...');
-    setTimeout(initPanorama, 800);
+let viewers = {};
+
+function initPanorama (key, cfg) {
+  if (!window.pannellum) {
+    console.warn('Pannellum 未載入');
     return;
   }
-  initPanorama();
-});
-function initPanorama () {
-  if (!window.pannellum) return;
-  if (document.querySelector('#panorama-vr03 .pnlm-container')) return; // 已初始化
-  pannellum.viewer('panorama-vr03', {
+  if (viewers[key]) return;
+  viewers[key] = pannellum.viewer('panorama-' + key, cfg);
+}
+
+function toggleGyro (key) {
+  const v = viewers[key];
+  if (!v) return;
+  if (v.isOrientationActive && v.isOrientationActive()) {
+    v.stopOrientation();
+    document.getElementById('gyro-' + key).textContent = '📱 啟用陀螺儀';
+  } else {
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(p => {
+        if (p === 'granted') {
+          v.startOrientation();
+          document.getElementById('gyro-' + key).textContent = '📱 陀螺儀 ON';
+        }
+      });
+    } else {
+      v.startOrientation();
+      document.getElementById('gyro-' + key).textContent = '📱 陀螺儀 ON';
+    }
+  }
+}
+
+function startViewers () {
+  if (typeof pannellum === 'undefined') {
+    setTimeout(startViewers, 600);
+    return;
+  }
+
+  // VR-03 完整 360° 配置（含 6 個 hotspot）
+  initPanorama('vr03', {
     type: 'equirectangular',
     panorama: '../assets/images/vr03-360-panorama.jpg',
-    autoLoad: true,
-    autoRotate: -2,            // 自動慢轉（負值=順時針）
-    autoRotateInactivityDelay: 3000,
+    preview: '../assets/images/vr03-360-panorama.jpg',
+    autoLoad: false,         // 預設不載入，使用者點擊「Load」按鈕
+    autoRotate: -2,
+    autoRotateInactivityDelay: 4000,
+    compass: false,
+    showZoomCtrl: true,
+    showFullscreenCtrl: true,
+    showControls: true,
+    mouseZoom: true,
+    keyboardZoom: true,
+    draggable: true,
+    hfov: 100, minHfov: 50, maxHfov: 120,
+    yaw: 0, pitch: -5,
+    backgroundColor: [0.1, 0.1, 0.1],
+    hotSpots: [
+      { pitch: -8, yaw: -10, type: 'info', text: '🔥 煤油燈・1962 軍眷宿舍標配' },
+      { pitch: -8, yaw: -45, type: 'info', text: '📻 老式真空管收音機・聽國軍廣播與蔡琴歌曲' },
+      { pitch: -8, yaw: 35, type: 'info', text: '🥣 搪瓷碗・印紅字「軍眷專用」[L1]' },
+      { pitch: 12, yaw: -130, type: 'info', text: '🪖 軍裝外套・1960s 駐軍制服' },
+      { pitch: 25, yaw: 90, type: 'info', text: '🖼️ 家庭老照片・空軍眷屬群像 [L2]' },
+      { pitch: 30, yaw: 130, type: 'info', text: '🕐 圓掛鐘・7:35 黃昏時分' },
+    ]
+  });
+
+  // VR-04 partial panorama（水彩平面圖模擬廣角）
+  initPanorama('vr04', {
+    type: 'equirectangular',
+    panorama: '../assets/images/vr04-airport-wall.jpg',
+    preview: '../assets/images/vr04-airport-wall.jpg',
+    haov: 110,               // 水平視角（partial panorama）
+    vaov: 70,                // 垂直視角
+    autoLoad: false,
     compass: false,
     showZoomCtrl: true,
     showFullscreenCtrl: true,
     mouseZoom: true,
-    keyboardZoom: true,
     draggable: true,
-    hfov: 100,                 // 初始視場角度
-    minHfov: 50, maxHfov: 120,
-    yaw: 0, pitch: -5,         // 初始水平/垂直視角
-    title: 'VR-03 眷舍客廳',
-    author: '黑貓任務小組 v9.4',
-    backgroundColor: [0.1, 0.1, 0.1]
+    hfov: 75, minHfov: 40, maxHfov: 100,
+    yaw: 0, pitch: 0,
+    backgroundColor: [0.05, 0.08, 0.15],
+    hotSpots: [
+      { pitch: 12, yaw: -3, type: 'info', text: '✈️ U-2 降落軌跡・contrail 飛行雲 [L1]' },
+      { pitch: -2, yaw: -12, type: 'info', text: '👩‍👧 母女剪影・1962 桃園基地等待 [L2]' },
+      { pitch: 5, yaw: 35, type: 'info', text: '🌸 桃花樹枝・桃園市花・LOGO 元素' },
+      { pitch: 8, yaw: -45, type: 'info', text: '🗼 瞭望塔・空軍基地警戒哨' },
+      { pitch: -8, yaw: 25, type: 'info', text: '🛬 跑道燈・1962 桃園空軍基地夜降信號 [L1]' },
+    ]
   });
 }
+
+window.addEventListener('load', startViewers);
 </script>
 <div class="callout">
   <strong>v9.4 VR 中估規格：</strong>縮為 <strong>1 場景 VR-A U-2 座艙 + 4 艘 8K 6DoF</strong>，預算 800 萬（區間 600–1,400）。<strong>加購 NT$200/人</strong>（套裝體驗第 ② 站擇一，前置預訂避免現場金流延誤動線），定位深度體驗付費客群。<br/><br/>
