@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI 對話 RAG — 等待的天空 v9.4</title>
+<title>AI 對話 RAG — 等待的天空</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;800&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../css/main.css" />
 <link rel="stylesheet" href="../css/animations.css" />
@@ -188,7 +188,7 @@
 <a href="../index.html" class="back-home">回首頁</a>
 
 <div class="callout callout-warn">
-  <strong>v6 AI 升級重點：</strong>取消「人工審核」依賴，改採 <strong>Guardrails 三層系統級防禦</strong>（L1 輸入過濾 / L2 RAG 強制錨定 / L3 輸出過濾）+ <strong>本地 air-gapped 部署</strong>。Corpus 物理隔離，不對外送第三方 API。對應風險矩陣 R7 / R10 / R11 紅區三項緩解。
+  <strong>AI 升級重點：</strong>取消「人工審核」依賴，改採 <strong>Guardrails 三層系統級防禦</strong>（L1 輸入過濾 / L2 RAG 強制錨定 / L3 輸出過濾）+ <strong>本地 air-gapped 部署</strong>。Corpus 物理隔離，不對外送第三方 API。對應風險矩陣 R7 / R10 / R11 紅區三項緩解。
 </div>
 
 <h2>系統架構 · 本地部署 + Air-gapped</h2>
@@ -203,7 +203,7 @@
   </tbody>
 </table>
 
-<h2>Guardrails 三層系統級防禦（v6 NEW · 取代「人工審核」）</h2>
+<h2>Guardrails 三層系統級防禦（NEW · 取代「人工審核」）</h2>
 <div style="margin:24px 0;">
   <div style="background:linear-gradient(135deg,rgba(74,93,58,.15) 0%,rgba(74,93,58,.05) 100%);border-left:6px solid var(--military);padding:20px 24px;margin-bottom:12px;">
     <p style="font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--military);margin-bottom:6px;">L1 · INPUT FILTER</p>
@@ -236,7 +236,7 @@
     <tr><td><strong>個資/聲紋</strong></td><td>個資法第 6 條敏感類別不蒐集；聲紋當場刪除不存檔</td></tr>
     <tr><td><strong>對話日誌</strong></td><td>30 天 hash 化後刪除</td></tr>
     <tr><td><strong>Corpus 治理</strong></td><td>口述史知情同意 + 書面授權 + 撤回機制</td></tr>
-    <tr><td><strong>稽核（v9.4 強化）</strong></td><td>每季滲透/紅隊測試；ISO 27001 框架對標；<strong>導入自動化資安監控與虛擬化資源調度工作流</strong>，確保本地端 AI 機房長期維運 OPEX 降至最低</td></tr>
+    <tr><td><strong>稽核（強化）</strong></td><td>每季滲透/紅隊測試；ISO 27001 框架對標；<strong>導入自動化資安監控與虛擬化資源調度工作流</strong>，確保本地端 AI 機房長期維運 OPEX 降至最低</td></tr>
     <tr><td><strong>危機應變</strong></td><td>AI 異常 SLA：24h 鎖定模型 / 72h 對外公告</td></tr>
     <tr><td><strong style="color:var(--crimson)">禁止項</strong></td><td>(1) 自由生成歷史人物對話（必須 RAG + Citation）；(2) 生成具體擊落數字、未公開隊員姓名；(3) 對外 API 傳送 corpus（air-gapped）</td></tr>
   </tbody>
@@ -314,7 +314,7 @@
     <tr><td>模型選用</td><td>本地部署 Llama 3.1 70B / Qwen 2.5（air-gapped 不對外）[L3]</td></tr>
     <tr><td>Corpus</td><td>已解密文件 + 見證者授權口述史（≥30 hr）+《一把青》原著（已授權）</td></tr>
     <tr><td>個資</td><td>個資法第 6 條敏感類別不蒐集；聲紋當場刪除；日誌 30 天 hash 化</td></tr>
-    <tr><td>幻覺緩解</td><td><strong>Guardrails 三層</strong>（L1/L2/L3）取代 v5 人工審核 + 介面警示「AI 生成，僅供參考」</td></tr>
+    <tr><td>幻覺緩解</td><td><strong>Guardrails 三層</strong>（L1/L2/L3）取代 人工審核 + 介面警示「AI 生成，僅供參考」</td></tr>
     <tr><td>透明度</td><td>每段 AI 回覆附「原始史料連結」與「來源錨定編號」</td></tr>
     <tr><td><strong style="color:var(--crimson)">禁止項</strong></td><td><strong>禁止 AI 自由生成歷史人物對話（必須 RAG + Citation）、禁止生成擊落數字、未公開隊員姓名；對外 API 傳送 corpus 嚴禁（air-gapped）</strong></td></tr>
   </table>
@@ -345,7 +345,7 @@
 </table>
 
 <div class="callout">
-  <strong>v6 AI 預算：1,200 萬元（總預算 15%）</strong> · 含 LLM 本地部署（Llama 3.1 70B / Qwen 2.5）+ Embedding（BGE-M3）+ 向量 DB（Qdrant）+ <strong>Guardrails 三層</strong>（Llama Guard 3 + NeMo Guardrails）+ 2× A100 80GB GPU + WAF + 季度滲透測試 + ISO 27001 對標。<br/>
+  <strong>AI 預算：1,200 萬元（總預算 15%）</strong> · 含 LLM 本地部署（Llama 3.1 70B / Qwen 2.5）+ Embedding（BGE-M3）+ 向量 DB（Qdrant）+ <strong>Guardrails 三層</strong>（Llama Guard 3 + NeMo Guardrails）+ 2× A100 80GB GPU + WAF + 季度滲透測試 + ISO 27001 對標。<br/>
   <strong>幻覺率目標 &lt;0.5%</strong>；對應風險矩陣 R7 / R10 / R11 紅區三項緩解。
 </div>
 
@@ -357,7 +357,7 @@
 </main>
 <footer class="site-foot">
   <div class="foot-bottom">
-    <small>★ 黑貓任務小組 · 等待的天空 · 故事的起點 · v9.4</small>
+    <small>★ 黑貓任務小組 · 等待的天空 · 故事的起點</small>
     <small>P14 / 25 · 3.4 AI 互動模組（RAG + 倫理揭露）</small>
   </div>
 </footer>
