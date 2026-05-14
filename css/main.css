@@ -210,23 +210,33 @@ body::before {
 }
 .title-cn {
   display: block;
-  font-size: clamp(48px, 9vw, 96px);
-  letter-spacing: 18px;
+  font-size: clamp(28px, 5vw, 56px);
+  letter-spacing: 8px;
   font-weight: 700;
-  text-indent: 18px;
-  line-height: 1.05;
+  text-indent: 8px;
+  line-height: 1.2;
   color: var(--paper);
   text-shadow: 0 0 48px rgba(232, 164, 184, 0.35), 0 4px 16px rgba(0,0,0,.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .title-en {
   display: block;
   font-family: var(--display);
-  font-size: clamp(14px, 2vw, 22px);
-  letter-spacing: 12px;
+  font-size: clamp(11px, 1.4vw, 16px);
+  letter-spacing: 6px;
   font-weight: 600;
   color: var(--khaki);
   margin-top: 8px;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 640px) {
+  .title-cn { letter-spacing: 4px; text-indent: 4px; font-size: clamp(22px, 6vw, 36px); }
+  .title-en { letter-spacing: 3px; font-size: 10px; }
 }
 .hero-slogan {
   font-family: var(--serif-tc);
