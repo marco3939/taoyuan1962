@@ -1,5 +1,19 @@
 /* 等待的天空 v9.4 — 主腳本 */
 
+// === Cloudflare Web Analytics（訪客統計）===
+// 使用說明：登入 Cloudflare → Web Analytics → 新增網站
+//   https://marco3939.github.io/taoyuan1962/ → 複製 token 貼到下方即可啟用。
+// token 為公開的網站識別碼，可安全寫在前端；留空則不載入、不影響網站。
+const CF_BEACON_TOKEN = ''; // ← 把 Cloudflare 給的 token 貼在這對引號中間
+(function loadCloudflareAnalytics() {
+  if (!CF_BEACON_TOKEN) return;
+  const s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', JSON.stringify({ token: CF_BEACON_TOKEN }));
+  (document.head || document.documentElement).appendChild(s);
+})();
+
 // === KPI 數字計數動畫 ===
 function animateCounters() {
   const counters = document.querySelectorAll('.kpi-num');
